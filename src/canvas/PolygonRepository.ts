@@ -20,10 +20,4 @@ export class PolygonRepository {
             return this.collisionDetector.isPointInPolygon(point, polygon);
         });
     }
-
-    public replace(oldPolygon: Polygon, newPolygon: Polygon): void {
-        const index = this.polygons.findIndex((polygon) => polygon === oldPolygon);
-
-        this.polygons[index] = newPolygon;
-    }
 }

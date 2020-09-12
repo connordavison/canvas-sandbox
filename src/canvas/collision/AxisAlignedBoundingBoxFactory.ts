@@ -1,8 +1,9 @@
 import { Point } from 'app/canvas/Point';
 import { AxisAlignedBoundingBox } from 'app/canvas/collision/AxisAlignedBoundingBox';
+import { Dimensions } from 'app/canvas/Dimensions';
 
 export class AxisAlignedBoundingBoxFactory {
-    public create(points: Point[]) {
+    public create(points: Point[]): AxisAlignedBoundingBox {
         const min = new Point(Infinity, Infinity, Infinity);
         const max = new Point(-Infinity, -Infinity, -Infinity);
 
@@ -33,5 +34,15 @@ export class AxisAlignedBoundingBoxFactory {
         }
 
         return new AxisAlignedBoundingBox(min, max);
+    }
+
+    public createAboutPoint(point: Point, dimensions: Dimensions): AxisAlignedBoundingBox {
+        const halfDimensionVector = dimensions.toVector().divide(2);
+        const translator = point.toVector();
+
+        return new AxisAlignedBoundingBox(
+            translator.add(halfDimensionVector.negate()).toPoint(),
+            translator.add(halfDimensionVector).toPoint(),
+        );
     }
 }

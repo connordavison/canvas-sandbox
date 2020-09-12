@@ -1,25 +1,25 @@
-import { MoveTransaction } from 'app/canvas/action/MoveTransaction';
+import { MouseListener } from 'app/canvas/MouseListener';
 import { Point } from 'app/canvas/Point';
 
 export class MouseEventRouter {
-    constructor(private moveTransaction: MoveTransaction) {}
+    constructor(private listeners: MouseListener[]) {}
 
-    public register(target: EventTarget) {
+    public register(target: EventTarget): void {
         target.addEventListener('mousedown', (event: MouseEvent) => this.onMouseDown(event));
         target.addEventListener('mousemove', (event: MouseEvent) => this.onMouseMove(event));
         target.addEventListener('mouseup', () => this.onMouseUp());
     }
 
     public onMouseDown(event: MouseEvent): void {
-        this.moveTransaction.onMouseDown(this.getMousePosition(event));
+        this.listeners.forEach((listener) => listener.onMouseDown(this.getMousePosition(event)));
     }
 
     public onMouseMove(event: MouseEvent): void {
-        this.moveTransaction.onMouseMove(this.getMousePosition(event));
+        this.listeners.forEach((listener) => listener.onMouseMove(this.getMousePosition(event)));
     }
 
     public onMouseUp(): void {
-        this.moveTransaction.onMouseUp();
+        this.listeners.forEach((listener) => listener.onMouseUp());
     }
 
     private getMousePosition(event: MouseEvent): Point {

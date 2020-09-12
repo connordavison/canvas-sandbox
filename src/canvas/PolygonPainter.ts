@@ -4,7 +4,7 @@ import { RenderingContext } from 'app/canvas/RenderingContext';
 export class PolygonPainter {
     constructor(private context: RenderingContext) {}
 
-    public paint(polygon: Polygon) {
+    public paint(polygon: Polygon): void {
         this.context.beginPath();
         this.context.moveTo(polygon.getStart());
 

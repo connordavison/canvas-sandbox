@@ -31,6 +31,18 @@ export class Vector {
         );
     }
 
+    public perpendicularXZ(): Vector {
+        return new Vector(
+            this.z,
+            this.y,
+            -this.x,
+        );
+    }
+
+    public negate(): Vector {
+        return new Vector(-this.x, -this.y, -this.z);
+    }
+
     public projectOnto(vector: Vector): Vector {
         const unit = vector.normalize();
 
@@ -71,11 +83,18 @@ export class Vector {
             + this.z * vector.z;
     }
 
-    public equals(errorSquared: number = 1E-8): boolean {
+    public angle(vector: Vector): number {
+        return Math.acos(
+            this.dot(vector)
+                / (this.length() * vector.length()),
+        );
+    }
+
+    public equals(errorSquared = 1E-8): boolean {
         return this.lengthSquared() < errorSquared;
     }
 
-    public movePoint(point: Point) {
+    public movePoint(point: Point): Point {
         return new Point(
             this.x + point.getX(),
             this.y + point.getY(),
