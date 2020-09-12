@@ -15,6 +15,9 @@ import { RotationAnchorDragTransaction } from 'app/canvas/action/RotationAnchorD
 import { PolygonCentroidCalculator } from 'app/canvas/PolygonCentroidCalculator';
 import { Vector } from 'app/canvas/Vector';
 import { GridLayerPainter } from 'app/canvas/GridLayerPainter';
+import { WorldPainter } from 'app/canvas/WorldPainter';
+import { PolygonLayerPainter } from 'app/canvas/PolygonLayerPainter';
+import { RotationAnchorLayerPainter } from 'app/canvas/RotationAnchorLayerPainter';
 
 const canvas = document.createElement('canvas');
 
@@ -25,6 +28,9 @@ const polygonPainter = new PolygonPainter(renderingContext);
 const aabbFactory = new AxisAlignedBoundingBoxFactory();
 const collisionDetector = new CollisionDetector(aabbFactory);
 const polygonRepository = new PolygonRepository(collisionDetector);
+
+const polygonLayerPainter = new PolygonLayerPainter(polygonRepository, polygonPainter);
+
 const polygonDragTransaction = new PolygonDragTransaction(polygonRepository);
 
 const rotationAnchorRepository = new RotationAnchorRepository(
@@ -36,6 +42,8 @@ const rotationAnchorPainter = new RotationAnchorPainter(
     polygonFactory,
     polygonPainter,
 );
+
+const rotationAnchorLayerPainter = new RotationAnchorLayerPainter(rotationAnchorRepository, rotationAnchorPainter);
 
 const polygonCentroidCalculator = new PolygonCentroidCalculator(aabbFactory);
 const rotationAnchorDragTransaction = new RotationAnchorDragTransaction(
@@ -59,19 +67,13 @@ const mouseEventRouter = new MouseEventRouter([polygonDragTransaction, rotationA
 mouseEventRouter.register(canvas);
 renderingContext.fitToScreen();
 
-const ticksPerSecond = 50;
+const worldPainter = new WorldPainter(renderingContext, [
+    gridLayerPainter,
+    polygonLayerPainter,
+    rotationAnchorLayerPainter,
+]);
+
+const ticksPerSecond = 60;
 const msPerTick = 1000 / ticksPerSecond;
 
-setInterval(() => {
-    renderingContext.clear();
-
-    gridLayerPainter.paint();
-
-    for (const polygon of polygonRepository.findAll()) {
-        polygonPainter.paint(polygon);
-    }
-
-    for (const rotationAnchor of rotationAnchorRepository.findAll()) {
-        rotationAnchorPainter.paint(rotationAnchor);
-    }
-}, msPerTick)
+setInterval(() => worldPainter.paint(), msPerTick)
