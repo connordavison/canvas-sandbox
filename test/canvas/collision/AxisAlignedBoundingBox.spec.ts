@@ -1,7 +1,6 @@
 import { AxisAlignedBoundingBox } from 'app/canvas/collision/AxisAlignedBoundingBox';
 import { Point } from 'app/canvas/Point';
 import { expect } from 'chai';
-import { PointComparator } from 'app/canvas/PointComparator';
 
 describe('AxisAlignedBoundingBox', () => {
     describe('fully-bounded box', () => {
@@ -32,11 +31,7 @@ describe('AxisAlignedBoundingBox', () => {
         });
 
         it('should know its center point', () => {
-            const pointComparator = new PointComparator();
-            const center = box.getCenter();
-            const result = pointComparator.equals(center, new Point(0, 0, 0));
-
-            expect(result).to.be.true;
+            expect(box.getCenter().equals(new Point(0, 0, 0))).to.be.true;
         });
     });
 

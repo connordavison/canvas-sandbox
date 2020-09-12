@@ -1,12 +1,9 @@
 import { Matrix } from 'app/canvas/Matrix';
 import { expect } from 'chai';
-import { PointComparator } from 'app/canvas/PointComparator';
 import { Point } from 'app/canvas/Point';
 
 describe('Matrix', () => {
     describe('rotateXZ', () => {
-        const pointComparator = new PointComparator();
-
         it('should rotate in the XZ plane', () => {
             const point = new Point(1, 1, 1);
             const rotations = [
@@ -24,7 +21,7 @@ describe('Matrix', () => {
                 const matrix = Matrix.rotateXZ(angle);
                 const actual = matrix.apply(point);
 
-                expect(pointComparator.equals(expected, actual)).to.be.true;
+                expect(actual.equals(expected)).to.be.true;
             });
         });
     })

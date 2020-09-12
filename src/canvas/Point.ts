@@ -1,3 +1,4 @@
+import { FuzzyMath } from 'app/canvas/FuzzyMath';
 import { Vector } from 'app/canvas/Vector';
 
 export class Point {
@@ -78,6 +79,12 @@ export class Point {
             point.y - this.y,
             point.z - this.z,
         );
+    }
+
+    public equals(point: Point): boolean {
+        return FuzzyMath.eq(this.getX(), point.getX())
+            && FuzzyMath.eq(this.getY(), point.getY())
+            && FuzzyMath.eq(this.getZ(), point.getZ());
     }
 
     public toVector(): Vector {

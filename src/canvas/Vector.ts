@@ -1,3 +1,4 @@
+import { FuzzyMath } from 'app/canvas/FuzzyMath';
 import { Point } from 'app/canvas/Point';
 
 export class Vector {
@@ -54,6 +55,10 @@ export class Vector {
     }
 
     public divide(divisor: number): Vector {
+        if (divisor === 0) {
+            throw 'Cannot divide vector by zero';
+        }
+
         return new Vector(
             this.x / divisor,
             this.y / divisor,
@@ -90,7 +95,7 @@ export class Vector {
             throw 'Angle is not defined for zero vectors.';
         }
 
-        return Math.acos(
+        return FuzzyMath.acos(
             this.dot(vector) / magnitudeProduct,
         );
     }
