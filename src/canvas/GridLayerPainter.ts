@@ -1,22 +1,27 @@
 import { Point } from 'app/canvas/Point';
 import { RenderingContext } from 'app/canvas/RenderingContext';
 
-const INTERVAL_X = 25;
-const INTERVAL_Z = 25;
+const MINOR_INTERVAL = 25;
+const MAJOR_INTERVAL = 250;
 
 export class GridLayerPainter {
     constructor(private context: RenderingContext) {}
 
     public paint(): void {
+        this.context.setStrokeStyle('#EEE');
+        this.strokeInterval(MINOR_INTERVAL);
+        this.context.setStrokeStyle('#CCC');
+        this.strokeInterval(MAJOR_INTERVAL);
+    }
+
+    private strokeInterval(interval: number) {
         const dimensions = this.context.getDimensions();
         const width = dimensions.getWidth();
         const depth = dimensions.getDepth();
 
-        this.context.setStrokeStyle('#EEE');
-
-        for (let x = INTERVAL_X; x < dimensions.getWidth(); x += INTERVAL_X) {
+        for (let x = interval; x < dimensions.getWidth(); x += interval) {
             this.strokeVertical(x, depth);
-            for (let z = INTERVAL_Z; z < dimensions.getDepth(); z+= INTERVAL_Z) {
+            for (let z = interval; z < dimensions.getDepth(); z+= interval) {
                 this.strokeHorizontal(z, width);
             }
         }

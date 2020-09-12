@@ -71,7 +71,6 @@ rotationAnchorRepository.push(
 const mouseEventRouter = new MouseEventRouter([polygonDragListener, rotationAnchorDragListener]);
 
 mouseEventRouter.register(document);
-renderingContext.fitToScreen();
 
 const worldPainter = new WorldPainter(renderingContext, [
     gridLayerPainter,
@@ -93,4 +92,7 @@ const msPerTick = 1000 / ticksPerSecond;
 
 document.body.appendChild(canvas);
 
-setInterval(() => worldPainter.paint(), msPerTick);
+setInterval(() => {
+    renderingContext.fitToScreen();
+    worldPainter.paint();
+}, msPerTick);
