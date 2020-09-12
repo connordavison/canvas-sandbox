@@ -84,9 +84,14 @@ export class Vector {
     }
 
     public angle(vector: Vector): number {
+        const magnitudeProduct = this.length() * vector.length();
+
+        if (magnitudeProduct === 0) {
+            throw 'Angle is not defined for zero vectors.';
+        }
+
         return Math.acos(
-            this.dot(vector)
-                / (this.length() * vector.length()),
+            this.dot(vector) / magnitudeProduct,
         );
     }
 

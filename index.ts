@@ -14,10 +14,12 @@ import { Point } from 'app/canvas/Point';
 import { RotationAnchorDragTransaction } from 'app/canvas/action/RotationAnchorDragTransaction';
 import { PolygonCentroidCalculator } from 'app/canvas/PolygonCentroidCalculator';
 import { Vector } from 'app/canvas/Vector';
+import { GridLayerPainter } from 'app/canvas/GridLayerPainter';
 
 const canvas = document.createElement('canvas');
 
 const renderingContext = new RenderingContext(canvas.getContext('2d'));
+const gridLayerPainter = new GridLayerPainter(renderingContext);
 const polygonPainter = new PolygonPainter(renderingContext);
 
 const aabbFactory = new AxisAlignedBoundingBoxFactory();
@@ -27,7 +29,7 @@ const polygonDragTransaction = new PolygonDragTransaction(polygonRepository);
 
 const rotationAnchorRepository = new RotationAnchorRepository(
     collisionDetector,
-    new Dimensions(10, 0, 10),
+    new Dimensions(15, 0, 15),
 );
 const polygonFactory = new PolygonFactory();
 const rotationAnchorPainter = new RotationAnchorPainter(
@@ -62,6 +64,8 @@ const msPerTick = 1000 / ticksPerSecond;
 
 setInterval(() => {
     renderingContext.clear();
+
+    gridLayerPainter.paint();
 
     for (const polygon of polygonRepository.findAll()) {
         polygonPainter.paint(polygon);

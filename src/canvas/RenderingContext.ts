@@ -1,3 +1,4 @@
+import { Dimensions } from 'app/canvas/Dimensions';
 import { Point } from 'app/canvas/Point';
 
 export class RenderingContext {
@@ -9,6 +10,12 @@ export class RenderingContext {
         this.context.clearRect(0, 0, canvas.width, canvas.height);
     }
 
+    public getDimensions(): Dimensions {
+        const canvas = this.context.canvas;
+
+        return new Dimensions(canvas.width, 0, canvas.height);
+    }
+
     public fitToScreen(): void {
         const canvas = this.context.canvas;
 
@@ -16,10 +23,23 @@ export class RenderingContext {
         canvas.height = window.innerHeight;
     }
 
+    public strokeLine(from: Point, to: Point): void {
+        this.beginPath();
+        this.moveTo(from);
+        this.lineTo(to);
+        this.closePath();
+    }
+
+    public setFillStyle(fillStyle: string): void {
+        this.context.fillStyle = fillStyle;
+    }
+
+    public setStrokeStyle(strokeStyle: string): void {
+        this.context.strokeStyle = strokeStyle;
+    }
+
     public beginPath(): void {
         this.context.beginPath();
-        this.context.fillStyle = '#F00';
-        this.context.strokeStyle = '#00F';
     }
 
     public closePath(): void {
