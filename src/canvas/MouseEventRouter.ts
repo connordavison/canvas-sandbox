@@ -7,7 +7,7 @@ export class MouseEventRouter {
     public register(target: EventTarget): void {
         target.addEventListener('mousedown', (event: MouseEvent) => this.onMouseDown(event));
         target.addEventListener('mousemove', (event: MouseEvent) => this.onMouseMove(event));
-        target.addEventListener('mouseup', () => this.onMouseUp());
+        target.addEventListener('mouseup', (event: MouseEvent) => this.onMouseUp(event));
     }
 
     public onMouseDown(event: MouseEvent): void {
@@ -18,8 +18,8 @@ export class MouseEventRouter {
         this.listeners.forEach((listener) => listener.onMouseMove(this.getMousePosition(event)));
     }
 
-    public onMouseUp(): void {
-        this.listeners.forEach((listener) => listener.onMouseUp());
+    public onMouseUp(event: MouseEvent): void {
+        this.listeners.forEach((listener) => listener.onMouseUp(this.getMousePosition(event)));
     }
 
     private getMousePosition(event: MouseEvent): Point {
