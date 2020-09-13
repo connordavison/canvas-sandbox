@@ -1,36 +1,38 @@
 import { Action } from 'app/canvas/Action';
 import { Point } from 'app/canvas/Point';
-import { PolygonRotator } from 'app/canvas/PolygonRotator';
 import { RotationAnchor } from 'app/canvas/RotationAnchor';
 import { RotationAnchorDragAction } from 'app/canvas/RotationAnchorDragAction';
+import { Vector } from 'app/canvas/Vector';
 
 export class RotationAnchorDragTransaction {
-    private lastPoint: Point;
+    private startOffset: Vector;
 
     constructor(
-        private start: Point,
         private anchor: RotationAnchor,
-        private polygonRotator: PolygonRotator,
+        private centerOfRotation: Point,
     ) {
-        this.lastPoint = start;
+        this.startOffset = anchor.getOffset();
     }
 
-    public commit(point: Point): Action {
-        this.update(point);
+    public commit(position: Point): Action {
+        this.update(position);
 
-        return new RotationAnchorDragAction(this.anchor, this.start, this.lastPoint, this.polygonRotator);
+        return new RotationAnchorDragAction(
+            this.anchor,
+            this.startOffset.signedAngleXZ(this.anchor.getOffset()),
+            this.centerOfRotation,
+        );
     }
 
-    public update(point: Point): void {
+    public update(position: Point): void {
+        const circleToPosition = this.centerOfRotation.vectorTo(position);
+
         const action = new RotationAnchorDragAction(
             this.anchor,
-            this.lastPoint,
-            point,
-            this.polygonRotator,
+            this.anchor.getOffset().signedAngleXZ(circleToPosition),
+            this.centerOfRotation,
         );
 
         action.do();
-
-        this.lastPoint = point;
     }
 }

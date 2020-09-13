@@ -55,4 +55,10 @@ export class RenderingContext {
     public moveTo(point: Point): void {
         this.context.moveTo(point.getX(), point.getZ());
     }
+
+    public drawCircle(origin: Point, radius: number): void {
+        this.beginPath();
+        this.context.arc(origin.getX(), origin.getZ(), radius, 0, 2 * Math.PI);
+        this.closePath();
+    }
 }

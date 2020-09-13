@@ -2,26 +2,25 @@ import { RotationAnchorRepository } from 'app/canvas/RotationAnchorRepository';
 import { Point } from 'app/canvas/Point';
 import { MouseListener } from 'app/canvas/MouseListener';
 import { RotationAnchorDragTransaction } from 'app/canvas/RotationAnchorDragTransaction';
-import { PolygonRotator } from 'app/canvas/PolygonRotator';
 import { ActionHistory } from 'app/canvas/ActionHistory';
+import { PolygonCentroidCalculator } from 'app/canvas/PolygonCentroidCalculator';
 
 export class RotationAnchorDragListener implements MouseListener {
     private transaction?: RotationAnchorDragTransaction;
 
     constructor(
-        private polygonRotator: PolygonRotator,
         private rotationAnchorRepository: RotationAnchorRepository,
+        private centroidCalculator: PolygonCentroidCalculator,
         private actionHistory: ActionHistory,
     ) {}
 
     public onMouseDown(point: Point): void {
-        const rotationAnchor = this.rotationAnchorRepository.findAtPoint(point);
+        const anchor = this.rotationAnchorRepository.findAtPoint(point);
 
-        if (rotationAnchor) {
+        if (anchor) {
             this.transaction = new RotationAnchorDragTransaction(
-                rotationAnchor.getPoint(),
-                rotationAnchor,
-                this.polygonRotator,
+                anchor,
+                this.centroidCalculator.getCentroid(anchor.getTarget()),
             );
         }
     }

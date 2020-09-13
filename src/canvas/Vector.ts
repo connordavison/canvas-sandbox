@@ -74,6 +74,10 @@ export class Vector {
         );
     }
 
+    public scaleToLength(length: number): Vector {
+        return this.divide(this.length()).scale(length);
+    }
+
     public length(): number {
         return Math.sqrt(this.lengthSquared());
     }
@@ -88,20 +92,38 @@ export class Vector {
             + this.z * vector.z;
     }
 
+    public signedAngleXZ(vector: Vector): number {
+        let angle = this.angle(vector);
+        const cross = this.cross(vector);
+        const normal = new Vector(0, -1, 0);
+
+        if (normal.dot(cross) < 0) {
+            angle = -angle;
+        }
+
+        return angle;
+    }
+
     public angle(vector: Vector): number {
+        return FuzzyMath.acos(this.cos(vector));
+    }
+
+    public cos(vector: Vector): number {
         const magnitudeProduct = this.length() * vector.length();
 
         if (magnitudeProduct === 0) {
             throw 'Angle is not defined for zero vectors.';
         }
 
-        return FuzzyMath.acos(
-            this.dot(vector) / magnitudeProduct,
-        );
+        return this.dot(vector) / magnitudeProduct;
     }
 
-    public equals(errorSquared = 1E-8): boolean {
-        return this.lengthSquared() < errorSquared;
+    public cross(vector: Vector): Vector {
+        return new Vector(
+            this.y * vector.z - this.z * vector.y,
+            this.z * vector.x - this.x * vector.z,
+            this.x * vector.y - this.y * vector.x,
+        );
     }
 
     public movePoint(point: Point): Point {

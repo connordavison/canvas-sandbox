@@ -8,9 +8,7 @@ import { PolygonDragListener } from 'app/canvas/PolygonDragListener';
 import { MouseEventRouter } from 'app/canvas/MouseEventRouter';
 import { RotationAnchorRepository } from 'app/canvas/RotationAnchorRepository';
 import { RotationAnchorPainter } from 'app/canvas/RotationAnchorPainter';
-import { PolygonFactory } from 'app/canvas/PolygonFactory';
 import { RotationAnchor } from 'app/canvas/RotationAnchor';
-import { Point } from 'app/canvas/Point';
 import { RotationAnchorDragListener } from 'app/canvas/RotationAnchorDragListener';
 import { PolygonCentroidCalculator } from 'app/canvas/PolygonCentroidCalculator';
 import { Vector } from 'app/canvas/Vector';
@@ -22,7 +20,8 @@ import { ActionHistory } from 'app/canvas/ActionHistory';
 import { RedoHotkey } from 'app/canvas/RedoHotkey';
 import { UndoHotkey } from 'app/canvas/UndoHotkey';
 import { KeyboardEventRouter } from 'app/canvas/KeyboardEventRouter';
-import { PolygonRotator } from 'app/canvas/PolygonRotator';
+import { RotationAnchorLocator } from 'app/canvas/RotationAnchorLocator';
+import { RotationAnchorCollisionDetector } from 'app/canvas/RotationAnchorCollisionDetector';
 
 const canvas = document.createElement('canvas');
 
@@ -39,33 +38,34 @@ const polygonLayerPainter = new PolygonLayerPainter(polygonRepository, polygonPa
 const actionHistory = new ActionHistory();
 const polygonDragListener = new PolygonDragListener(polygonRepository, actionHistory);
 
-const rotationAnchorRepository = new RotationAnchorRepository(
+const centroidCalculator = new PolygonCentroidCalculator(aabbFactory);
+const rotationAnchorLocator = new RotationAnchorLocator(centroidCalculator);
+const rotationAnchorPainter = new RotationAnchorPainter(
+    rotationAnchorLocator,
+    renderingContext,
+);
+
+const rotationAnchorCollisionDetector = new RotationAnchorCollisionDetector(
     collisionDetector,
+    rotationAnchorLocator,
     new Dimensions(15, 0, 15),
 );
-const polygonFactory = new PolygonFactory();
-const rotationAnchorPainter = new RotationAnchorPainter(
-    polygonFactory,
-    polygonPainter,
-);
-
+const rotationAnchorRepository = new RotationAnchorRepository(rotationAnchorCollisionDetector);
 const rotationAnchorLayerPainter = new RotationAnchorLayerPainter(rotationAnchorRepository, rotationAnchorPainter);
 
-const polygonCentroidCalculator = new PolygonCentroidCalculator(aabbFactory);
-const polygonRotator = new PolygonRotator(polygonCentroidCalculator);
 const rotationAnchorDragListener = new RotationAnchorDragListener(
-    polygonRotator,
     rotationAnchorRepository,
+    centroidCalculator,
     actionHistory,
 );
 
-const dimensions = new Dimensions(50, 0, 50);
+const dimensions = new Dimensions(100, 0, 50);
 const topFace = dimensions.createTopFace();
 topFace.shift(new Vector(125, 0, 75))
 polygonRepository.push(topFace);
 
 rotationAnchorRepository.push(
-    new RotationAnchor(new Point(100, 0, 100), topFace)
+    new RotationAnchor(new Vector(0, 0, 50), topFace),
 );
 
 const mouseEventRouter = new MouseEventRouter([polygonDragListener, rotationAnchorDragListener]);

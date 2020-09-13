@@ -32,9 +32,14 @@ export class Point {
         return this.z;
     }
 
-    public getRelativeAngleBetween(a: Point, b: Point): number {
-        return this.getDistanceSignFromXZLine(a, b)
-            * this.vectorTo(a).angle(this.vectorTo(b));
+    public getAngleBetween(a: Point, b: Point): number {
+        const angle = this.vectorTo(a).angle(this.vectorTo(b));
+
+        if (angle > Math.PI) {
+            return angle - 2 * Math.PI;
+        }
+
+        return angle;
     }
 
     public getDistanceSignFromXZLine(a: Point, b: Point): number {
@@ -75,9 +80,9 @@ export class Point {
 
     public relativeTo(point: Point): Point {
         return new Point(
-            point.x - this.x,
-            point.y - this.y,
-            point.z - this.z,
+            this.x - point.x,
+            this.y - point.y,
+            this.z - point.z,
         );
     }
 

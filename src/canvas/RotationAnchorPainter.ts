@@ -1,19 +1,16 @@
-import { PolygonFactory } from 'app/canvas/PolygonFactory';
-import { PolygonPainter } from 'app/canvas/PolygonPainter';
+import { RenderingContext } from 'app/canvas/RenderingContext';
 import { RotationAnchor } from 'app/canvas/RotationAnchor';
+import { RotationAnchorLocator } from 'app/canvas/RotationAnchorLocator';
 
 export class RotationAnchorPainter {
     constructor(
-        private polygonFactory: PolygonFactory,
-        private polygonPainter: PolygonPainter,
+        private rotationAnchorLocator: RotationAnchorLocator,
+        private renderingContext: RenderingContext,
     ) {}
 
-    public paint(rotationAnchor: RotationAnchor): void {
-        const polygon = this.polygonFactory.createXZSquareAboutPoint(
-            rotationAnchor.getPoint(),
-            10,
-        );
+    public paint(anchor: RotationAnchor): void {
+        const origin = this.rotationAnchorLocator.locate(anchor);
 
-        this.polygonPainter.paint(polygon);
+        this.renderingContext.drawCircle(origin, anchor.getRadius());
     }
 }
