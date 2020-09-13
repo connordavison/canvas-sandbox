@@ -1,11 +1,8 @@
-import { CollisionDetector } from 'app/canvas/collision/CollisionDetector';
 import { Point } from 'app/canvas/Point';
 import { Polygon } from 'app/canvas/Polygon';
 
 export class PolygonRepository {
     private polygons: Polygon[] = [];
-
-    constructor(private collisionDetector: CollisionDetector) {}
 
     public findAll(): Polygon[] {
         return this.polygons;
@@ -16,8 +13,6 @@ export class PolygonRepository {
     }
 
     public findAtPoint(point: Point): Polygon {
-        return this.polygons.find((polygon) => {
-            return this.collisionDetector.isPointInPolygon(point, polygon);
-        });
+        return this.polygons.find((polygon) => polygon.containsPoint(point));
     }
 }

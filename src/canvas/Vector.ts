@@ -32,11 +32,19 @@ export class Vector {
         );
     }
 
-    public perpendicularXZ(): Vector {
+    public rightPerpendicularXZ(): Vector {
         return new Vector(
             this.z,
             this.y,
             -this.x,
+        );
+    }
+
+    public leftPerpendicularXZ(): Vector {
+        return new Vector(
+            -this.z,
+            this.y,
+            this.x,
         );
     }
 
@@ -48,6 +56,11 @@ export class Vector {
         const unit = vector.normalize();
 
         return unit.scale(this.dot(unit));
+    }
+
+    public isParallel(vector: Vector): boolean {
+        return this.normalize()
+            .equals(vector.normalize());
     }
 
     public normalize(): Vector {
@@ -132,6 +145,12 @@ export class Vector {
             this.y + point.getY(),
             this.z + point.getZ(),
         );
+    }
+
+    public equals(vector: Vector): boolean {
+        return FuzzyMath.eq(this.x, vector.x)
+            && FuzzyMath.eq(this.y, vector.y)
+            && FuzzyMath.eq(this.z, vector.z);
     }
 
     public toPoint(): Point {

@@ -30,8 +30,7 @@ const gridLayerPainter = new GridLayerPainter(renderingContext);
 const polygonPainter = new PolygonPainter(renderingContext);
 
 const aabbFactory = new AxisAlignedBoundingBoxFactory();
-const collisionDetector = new CollisionDetector(aabbFactory);
-const polygonRepository = new PolygonRepository(collisionDetector);
+const polygonRepository = new PolygonRepository();
 
 const polygonLayerPainter = new PolygonLayerPainter(polygonRepository, polygonPainter);
 
@@ -45,6 +44,7 @@ const rotationAnchorPainter = new RotationAnchorPainter(
     renderingContext,
 );
 
+const collisionDetector = new CollisionDetector(aabbFactory);
 const rotationAnchorCollisionDetector = new RotationAnchorCollisionDetector(
     collisionDetector,
     rotationAnchorLocator,

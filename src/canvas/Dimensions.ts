@@ -21,9 +21,9 @@ export class Dimensions {
     public createTopFace(): PolyhedronFace {
         return new Polygon([
             new Point(0, this.height, 0),
-            new Point(this.width, this.height, 0),
-            new Point(this.width, this.height, this.depth),
             new Point(0, this.height, this.depth),
+            new Point(this.width, this.height, this.depth),
+            new Point(this.width, this.height, 0),
         ]);
     }
 

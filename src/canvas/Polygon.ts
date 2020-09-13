@@ -1,11 +1,51 @@
 import { Point } from 'app/canvas/Point';
 import { Vector } from 'app/canvas/Vector';
 import { Matrix } from 'app/canvas/Matrix';
+import { ConvexPolygonFace } from 'app/canvas/ConvexPolygonFace';
 
 type PointPredicate = (point: Point) => boolean;
 
 export class Polygon {
     constructor(private points: Point[]) {}
+
+    /**
+     * Assumes that polygon is convex and constructed clockwise
+     */
+    public containsPoint(point: Point): boolean {
+        const faces = this.getClockwiseFaces();
+
+        if (faces.length < 3) {
+            throw 'Invalid polygon';
+        }
+
+        for (const face of this.getClockwiseFaces()) {
+            if (face.isPointOutside(point)) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    public getClockwiseFaces(): ConvexPolygonFace[] {
+        const faces = [];
+        const n = this.points.length;
+
+        for (let i = 0; i < n; i++) {
+            const a = this.points[i];
+            const b = this.points[(i + 1) % n];
+
+            faces.push(
+                new ConvexPolygonFace(
+                    a,
+                    b,
+                    a.vectorTo(b).leftPerpendicularXZ(),
+                ),
+            );
+        }
+
+        return faces;
+    }
 
     public getPoints(): Point[] {
         return this.points;

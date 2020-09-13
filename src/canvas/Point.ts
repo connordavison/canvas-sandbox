@@ -86,6 +86,12 @@ export class Point {
         );
     }
 
+    public midpointTo(point: Point): Point {
+        return this.vectorTo(point)
+            .divide(2)
+            .movePoint(this);
+    }
+
     public equals(point: Point): boolean {
         return FuzzyMath.eq(this.getX(), point.getX())
             && FuzzyMath.eq(this.getY(), point.getY())
