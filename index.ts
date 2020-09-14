@@ -22,6 +22,9 @@ import { UndoHotkey } from 'app/canvas/UndoHotkey';
 import { KeyboardEventRouter } from 'app/canvas/KeyboardEventRouter';
 import { RotationAnchorLocator } from 'app/canvas/RotationAnchorLocator';
 import { RotationAnchorCollisionDetector } from 'app/canvas/RotationAnchorCollisionDetector';
+import { PolygonShifterFactory } from 'app/canvas/PolygonShifterFactory';
+import { SeparatingAxisCollisionDetector } from 'app/canvas/collision/SeparatingAxisCollisionDetector';
+import { RandomPolygonSpawner } from 'app/canvas/RandomQuadrangleSpawner';
 
 const canvas = document.createElement('canvas');
 
@@ -35,7 +38,9 @@ const polygonRepository = new PolygonRepository();
 const polygonLayerPainter = new PolygonLayerPainter(polygonRepository, polygonPainter);
 
 const actionHistory = new ActionHistory();
-const polygonDragListener = new PolygonDragListener(polygonRepository, actionHistory);
+const separatingAxisCollisionDetector = new SeparatingAxisCollisionDetector();
+const polygonShifterFactory = new PolygonShifterFactory(polygonRepository, separatingAxisCollisionDetector);
+const polygonDragListener = new PolygonDragListener(polygonRepository, polygonShifterFactory, actionHistory);
 
 const centroidCalculator = new PolygonCentroidCalculator(aabbFactory);
 const rotationAnchorLocator = new RotationAnchorLocator(centroidCalculator);
@@ -59,14 +64,15 @@ const rotationAnchorDragListener = new RotationAnchorDragListener(
     actionHistory,
 );
 
-const dimensions = new Dimensions(100, 0, 50);
-const topFace = dimensions.createTopFace();
-topFace.shift(new Vector(125, 0, 75))
-polygonRepository.push(topFace);
+const polygonSpawner = new RandomPolygonSpawner();
+const polygons = polygonSpawner.spawnMany(50);
 
-rotationAnchorRepository.push(
-    new RotationAnchor(new Vector(0, 0, 50), topFace),
-);
+for (const polygon of polygons) {
+    polygonRepository.push(polygon);
+    rotationAnchorRepository.push(
+        new RotationAnchor(new Vector(0, 0, 80), polygon),
+    );
+}
 
 const mouseEventRouter = new MouseEventRouter([polygonDragListener, rotationAnchorDragListener]);
 

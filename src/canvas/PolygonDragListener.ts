@@ -3,12 +3,14 @@ import { Point } from 'app/canvas/Point';
 import { MouseListener } from 'app/canvas/MouseListener';
 import { ActionHistory } from 'app/canvas/ActionHistory';
 import { PolygonDragTransaction } from 'app/canvas/PolygonDragTransaction';
+import { PolygonShifterFactory } from 'app/canvas/PolygonShifterFactory';
 
 export class PolygonDragListener implements MouseListener {
     private transaction?: PolygonDragTransaction;
 
     constructor(
         private polygonRepository: PolygonRepository,
+        private polygonShifterFactory: PolygonShifterFactory,
         private actionHistory: ActionHistory,
     ) {}
 
@@ -16,7 +18,10 @@ export class PolygonDragListener implements MouseListener {
         const targetPolygon = this.polygonRepository.findAtPoint(point);
 
         if (targetPolygon) {
-            this.transaction = new PolygonDragTransaction(point, targetPolygon);
+            this.transaction = new PolygonDragTransaction(
+                point,
+                this.polygonShifterFactory.createForPolygon(targetPolygon),
+            );
         }
     }
 

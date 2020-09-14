@@ -1,16 +1,16 @@
 import { Action } from 'app/canvas/Action';
 import { Point } from 'app/canvas/Point';
-import { Polygon } from 'app/canvas/Polygon';
+import { PolygonShifter } from 'app/canvas/PolygonShifter';
 
 export class PolygonDragAction implements Action {
     constructor(
-        private polygon: Polygon,
+        private polygonShifter: PolygonShifter,
         private start: Point,
         private end: Point,
     ) {}
 
-    public do(): void {
-        this.move(this.start, this.end);
+    public do(): boolean {
+        return this.move(this.start, this.end);
     }
 
     public undo(): void {
@@ -21,7 +21,7 @@ export class PolygonDragAction implements Action {
         return `move polygon from ${this.start} to ${this.end}`;
     }
 
-    private move(start: Point, end: Point): void {
-        this.polygon.shift(start.vectorTo(end));
+    private move(start: Point, end: Point): boolean {
+        return this.polygonShifter.shift(start.vectorTo(end));
     }
 }

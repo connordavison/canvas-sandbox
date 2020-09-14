@@ -55,6 +55,10 @@ export class Polygon {
         this.points = this.points.map((point) => vector.movePoint(point));
     }
 
+    public projectShift(vector: Vector): Polygon {
+        return new Polygon(this.points.map((point) => vector.movePoint(point)));
+    }
+
     public some(predicate: PointPredicate): boolean {
         return this.points.some(predicate);
     }
