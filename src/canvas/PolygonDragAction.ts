@@ -17,6 +17,10 @@ export class PolygonDragAction implements Action {
         this.move(this.end, this.start);
     }
 
+    public toString(): string {
+        return `move polygon from ${this.start} to ${this.end}`;
+    }
+
     private move(start: Point, end: Point): void {
         this.polygon.shift(start.vectorTo(end));
     }

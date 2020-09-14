@@ -1,10 +1,12 @@
 import { Action } from 'app/canvas/Action';
+import { logger } from 'app/canvas/Logger';
 
 export class ActionHistory {
     private undoStack: Action[] = [];
     private redoStack: Action[] = [];
 
     public push(action: Action): void {
+        this.log(`Did "${action.toString()}"`);
         this.undoStack.push(action);
         this.redoStack.length = 0;
     }
@@ -18,6 +20,8 @@ export class ActionHistory {
 
         action.undo();
 
+        this.log(`Undone "${action.toString()}"`);
+
         this.redoStack.push(action);
     }
 
@@ -29,6 +33,8 @@ export class ActionHistory {
         }
 
         action.do();
+
+        this.log(`Redone "${action.toString()}"`);
 
         this.undoStack.push(action);
     }
@@ -44,5 +50,9 @@ export class ActionHistory {
     public clear(): void {
         this.undoStack.length = 0;
         this.redoStack.length = 0;
+    }
+
+    private log(message: string): void {
+        logger.log(`[ActionHistory] ${message}`);
     }
 }

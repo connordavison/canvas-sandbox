@@ -17,6 +17,10 @@ export class RotationAnchorDragAction implements Action {
         this.rotate(-this.angle);
     }
 
+    public toString(): string {
+        return `rotate polygon ${this.angle} rads about ${this.centerOfRotation}`;
+    }
+
     private rotate(angle: number): void {
         this.anchor.rotateAngleAboutPoint(angle, this.centerOfRotation);
     }
