@@ -5,6 +5,9 @@ export class PolygonPainter {
     constructor(private context: RenderingContext) {}
 
     public paint(polygon: Polygon): void {
+        this.context.setFillStyle('#EAEADA');
+        this.context.setStrokeStyle('#444');
+        this.context.setLineWidth(2);
         this.context.beginPath();
         this.context.moveTo(polygon.getStart());
 

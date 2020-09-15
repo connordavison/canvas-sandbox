@@ -38,6 +38,10 @@ export class RenderingContext {
         this.context.strokeStyle = strokeStyle;
     }
 
+    public setLineWidth(lineWidth: number): void {
+        this.context.lineWidth = lineWidth;
+    }
+
     public beginPath(): void {
         this.context.beginPath();
     }
