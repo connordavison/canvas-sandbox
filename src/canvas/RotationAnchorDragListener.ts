@@ -16,10 +16,7 @@ export class RotationAnchorDragListener implements MouseListener {
         const anchor = this.rotationAnchorRepository.findAtPoint(point);
 
         if (anchor) {
-            this.transaction = new RotationAnchorDragTransaction(
-                anchor,
-                anchor.getTarget().getCenter(),
-            );
+            this.transaction = new RotationAnchorDragTransaction(anchor);
         }
     }
 

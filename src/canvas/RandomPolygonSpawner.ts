@@ -27,10 +27,7 @@ export class RandomPolygonSpawner {
 
         const polygon = new Polygon(vertices);
 
-        polygon.transform(
-            Matrix.rotateXZ(Random.angle()),
-            new Point(0, 0, 0)
-        );
+        polygon.transform(Matrix.rotateXZ(Random.angle()));
 
         polygon.shift(
             new Vector(

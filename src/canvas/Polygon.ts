@@ -27,6 +27,16 @@ export class Polygon {
         return true;
     }
 
+    public getFirstClockwiseFace(): ConvexPolygonFace {
+        const faces = this.getClockwiseFaces();
+
+        if (faces.length === 0) {
+            throw 'Invalid polygon';
+        }
+
+        return faces[0];
+    }
+
     public getClockwiseFaces(): ConvexPolygonFace[] {
         const faces = [];
         const n = this.points.length;
@@ -80,11 +90,13 @@ export class Polygon {
         return this.points.slice(1);
     }
 
-    public transform(matrix: Matrix, origin: Point): void {
+    public transform(matrix: Matrix): void {
+        const center = this.getCenter();
+
         this.points = this.points.map((point) => {
-            return matrix.applyToPoint(point.relativeTo(origin))
+            return matrix.applyToPoint(point.relativeTo(center))
                 .toVector()
-                .movePoint(origin);
+                .movePoint(center);
         });
     }
 

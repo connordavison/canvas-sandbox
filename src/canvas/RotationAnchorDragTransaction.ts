@@ -2,16 +2,12 @@ import { Action } from 'app/canvas/Action';
 import { Point } from 'app/canvas/Point';
 import { RotationAnchor } from 'app/canvas/RotationAnchor';
 import { RotationAnchorDragAction } from 'app/canvas/RotationAnchorDragAction';
-import { Vector } from 'app/canvas/Vector';
 
 export class RotationAnchorDragTransaction {
-    private startOffset: Vector;
+    private start: Point;
 
-    constructor(
-        private anchor: RotationAnchor,
-        private centerOfRotation: Point,
-    ) {
-        this.startOffset = anchor.getOffset();
+    constructor(private anchor: RotationAnchor) {
+        this.start = anchor.getAbsolutePosition();
     }
 
     public commit(position: Point): Action {
@@ -19,18 +15,14 @@ export class RotationAnchorDragTransaction {
 
         return new RotationAnchorDragAction(
             this.anchor,
-            this.startOffset.signedAngleXZ(this.anchor.getOffset()),
-            this.centerOfRotation,
+            this.anchor.getAngleTo(this.start),
         );
     }
 
     public update(position: Point): void {
-        const circleToPosition = this.centerOfRotation.vectorTo(position);
-
         const action = new RotationAnchorDragAction(
             this.anchor,
-            this.anchor.getOffset().signedAngleXZ(circleToPosition),
-            this.centerOfRotation,
+            this.anchor.getAngleTo(position),
         );
 
         action.do();

@@ -1,34 +1,40 @@
 import { Matrix } from 'app/canvas/Matrix';
 import { Point } from 'app/canvas/Point';
 import { Polygon } from 'app/canvas/Polygon';
-import { Vector } from 'app/canvas/Vector';
 
 export class RotationAnchor {
-    constructor(
-        private offset: Vector,
-        private target: Polygon,
-    ) {}
+    constructor(private target: Polygon) {}
 
     public getRadius(): number {
         return 5;
     }
 
-    public getOffset(): Vector {
-        return this.offset;
+    public getAngleTo(point: Point): number {
+        const centerOfRotation = this.getCenterOfRotation();
+        const centerToThis = centerOfRotation.vectorTo(this.getAbsolutePosition());
+        const centerToPoint = centerOfRotation.vectorTo(point);
+
+        return centerToThis.signedAngleXZ(centerToPoint);
+    }
+
+    public getCenterOfRotation(): Point {
+        return this.target.getCenter();
     }
 
     public getAbsolutePosition(): Point {
-        return this.offset.movePoint(this.target.getCenter());
+        const face = this.target.getFirstClockwiseFace();
+
+        return face.getMidpoint()
+            .toVector()
+            .add(face.getUnitNormal().scale(20))
+            .toPoint();
     }
 
     public getTarget(): Polygon {
         return this.target;
     }
 
-    public rotateAngleAboutPoint(angle: number, point: Point): void {
-        const rotation = Matrix.rotateXZ(angle);
-
-        this.target.transform(rotation, point);
-        this.offset = rotation.applyToVector(this.offset);
+    public rotateAngleAboutPoint(angle: number): void {
+        this.target.transform(Matrix.rotateXZ(angle));
     }
 }

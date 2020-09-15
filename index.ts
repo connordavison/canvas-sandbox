@@ -21,7 +21,6 @@ import { RotationAnchorLayerPainter } from 'app/canvas/RotationAnchorLayerPainte
 import { RotationAnchorPainter } from 'app/canvas/RotationAnchorPainter';
 import { RotationAnchorRepository } from 'app/canvas/RotationAnchorRepository';
 import { UndoHotkey } from 'app/canvas/UndoHotkey';
-import { Vector } from 'app/canvas/Vector';
 import { WorldPainter } from 'app/canvas/WorldPainter';
 
 const canvas = document.createElement('canvas');
@@ -60,9 +59,7 @@ const polygons = polygonSpawner.spawnMany(50);
 
 for (const polygon of polygons) {
     polygonRepository.push(polygon);
-    rotationAnchorRepository.push(
-        new RotationAnchor(new Vector(0, 0, 80), polygon),
-    );
+    rotationAnchorRepository.push(new RotationAnchor(polygon));
 }
 
 const mouseEventRouter = new MouseEventRouter([polygonDragListener, rotationAnchorDragListener]);
