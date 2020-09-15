@@ -6,20 +6,18 @@ import { Dimensions } from 'app/canvas/Dimensions';
 import { GridLayerPainter } from 'app/canvas/GridLayerPainter';
 import { KeyboardEventRouter } from 'app/canvas/KeyboardEventRouter';
 import { MouseEventRouter } from 'app/canvas/MouseEventRouter';
-import { PolygonCentroidCalculator } from 'app/canvas/PolygonCentroidCalculator';
 import { PolygonDragListener } from 'app/canvas/PolygonDragListener';
 import { PolygonLayerPainter } from 'app/canvas/PolygonLayerPainter';
 import { PolygonPainter } from 'app/canvas/PolygonPainter';
 import { PolygonRepository } from 'app/canvas/PolygonRepository';
 import { PolygonShifterFactory } from 'app/canvas/PolygonShifterFactory';
-import { RandomPolygonSpawner } from 'app/canvas/RandomQuadrangleSpawner';
+import { RandomPolygonSpawner } from 'app/canvas/RandomPolygonSpawner';
 import { RedoHotkey } from 'app/canvas/RedoHotkey';
 import { RenderingContext } from 'app/canvas/RenderingContext';
 import { RotationAnchor } from 'app/canvas/RotationAnchor';
 import { RotationAnchorCollisionDetector } from 'app/canvas/RotationAnchorCollisionDetector';
 import { RotationAnchorDragListener } from 'app/canvas/RotationAnchorDragListener';
 import { RotationAnchorLayerPainter } from 'app/canvas/RotationAnchorLayerPainter';
-import { RotationAnchorLocator } from 'app/canvas/RotationAnchorLocator';
 import { RotationAnchorPainter } from 'app/canvas/RotationAnchorPainter';
 import { RotationAnchorRepository } from 'app/canvas/RotationAnchorRepository';
 import { UndoHotkey } from 'app/canvas/UndoHotkey';
@@ -42,17 +40,11 @@ const separatingAxisCollisionDetector = new SeparatingAxisCollisionDetector();
 const polygonShifterFactory = new PolygonShifterFactory(polygonRepository, separatingAxisCollisionDetector);
 const polygonDragListener = new PolygonDragListener(polygonRepository, polygonShifterFactory, actionHistory);
 
-const centroidCalculator = new PolygonCentroidCalculator(aabbFactory);
-const rotationAnchorLocator = new RotationAnchorLocator(centroidCalculator);
-const rotationAnchorPainter = new RotationAnchorPainter(
-    rotationAnchorLocator,
-    renderingContext,
-);
+const rotationAnchorPainter = new RotationAnchorPainter(renderingContext);
 
 const collisionDetector = new CollisionDetector(aabbFactory);
 const rotationAnchorCollisionDetector = new RotationAnchorCollisionDetector(
     collisionDetector,
-    rotationAnchorLocator,
     new Dimensions(15, 0, 15),
 );
 const rotationAnchorRepository = new RotationAnchorRepository(rotationAnchorCollisionDetector);
@@ -60,7 +52,6 @@ const rotationAnchorLayerPainter = new RotationAnchorLayerPainter(rotationAnchor
 
 const rotationAnchorDragListener = new RotationAnchorDragListener(
     rotationAnchorRepository,
-    centroidCalculator,
     actionHistory,
 );
 

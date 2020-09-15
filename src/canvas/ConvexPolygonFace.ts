@@ -19,11 +19,15 @@ export class ConvexPolygonFace {
         return this.end;
     }
 
+    public getUnitNormal(): Vector {
+        return this.normal.normalize();
+    }
+
     public getNormal(): Vector {
         return this.normal;
     }
 
-    private getMidpoint(): Point {
+    public getMidpoint(): Point {
         return this.start.midpointTo(this.end);
     }
 }

@@ -51,6 +51,15 @@ export class Polygon {
         return this.points;
     }
 
+    public getCenter(): Point {
+        let sum = new Vector(0, 0, 0);
+
+        for (const point of this.points) {
+            sum = sum.add(point.toVector());
+        }
+
+        return sum.divide(this.points.length).toPoint();
+    }
     public shift(vector: Vector): void {
         this.points = this.points.map((point) => vector.movePoint(point));
     }

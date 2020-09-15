@@ -17,8 +17,8 @@ export class RotationAnchor {
         return this.offset;
     }
 
-    public getAbsolutePosition(origin: Point): Point {
-        return this.offset.movePoint(origin);
+    public getAbsolutePosition(): Point {
+        return this.offset.movePoint(this.target.getCenter());
     }
 
     public getTarget(): Polygon {
