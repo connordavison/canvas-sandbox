@@ -2,6 +2,7 @@ import { Point } from 'app/canvas/Point';
 import { Vector } from 'app/canvas/Vector';
 import { Matrix } from 'app/canvas/Matrix';
 import { ConvexPolygonFace } from 'app/canvas/ConvexPolygonFace';
+import { PolygonProjection } from 'app/canvas/collision/PolygonProjection';
 
 type PointPredicate = (point: Point) => boolean;
 
@@ -61,6 +62,25 @@ export class Polygon {
         return this.points;
     }
 
+    public projectOnto(vector: Vector): PolygonProjection {
+        let start = Infinity;
+        let end = -Infinity;
+
+        for (const point of this.points) {
+            const projection = point.toVector().dot(vector);
+
+            if (projection < start) {
+                start = projection;
+            }
+
+            if (projection > end) {
+                end = projection;
+            }
+        }
+
+        return new PolygonProjection(start, end);
+    }
+
     public getCenter(): Point {
         let sum = new Vector(0, 0, 0);
 
@@ -70,6 +90,7 @@ export class Polygon {
 
         return sum.divide(this.points.length).toPoint();
     }
+
     public shift(vector: Vector): void {
         this.points = this.points.map((point) => vector.movePoint(point));
     }

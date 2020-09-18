@@ -1,51 +1,53 @@
+import { AxisPolygonProjectionCollision } from 'app/canvas/collision/AxisPolygonProjectionCollision';
 import { ConvexPolygonFace } from 'app/canvas/ConvexPolygonFace';
-import { Point } from 'app/canvas/Point';
 import { Polygon } from 'app/canvas/Polygon';
-import { Vector } from 'app/canvas/Vector';
 
 export class SeparatingAxisCollisionDetector {
-    public collides(source: Polygon, target: Polygon): boolean {
-        const faces: ConvexPolygonFace[] = source.getClockwiseFaces()
-            .concat(target.getClockwiseFaces());
+    public collides(
+        source: Polygon,
+        target: Polygon,
+    ): AxisPolygonProjectionCollision|undefined {
+        const sourceCollisions = this.collidesOnFaces(source, target, source.getClockwiseFaces());
+        const targetCollisions = this.collidesOnFaces(source, target, target.getClockwiseFaces());
+
+        if (undefined === sourceCollisions || undefined === targetCollisions) {
+            return undefined;
+        }
+
+        const allCollisions = sourceCollisions.concat(targetCollisions);
+        const minCollision = allCollisions.sort((a: AxisPolygonProjectionCollision, b: AxisPolygonProjectionCollision) => {
+            return a.getMagnitude() - b.getMagnitude();
+        })[0];
+
+        return minCollision;
+    }
+
+    private collidesOnFaces(
+        source: Polygon,
+        target: Polygon,
+        faces: ConvexPolygonFace[],
+    ): AxisPolygonProjectionCollision[]|undefined {
+        const collisions = [];
 
         for (const face of faces) {
-            const normal = face.getNormal();
+            const normal = face.getUnitNormal();
 
-            const sourceProjection = this.projectPointsOntoVector(source.getPoints(), normal);
-            const targetProjection = this.projectPointsOntoVector(target.getPoints(), normal);
+            const sourceProjection = source.projectOnto(normal);
+            const targetProjection = target.projectOnto(normal);
 
             if (sourceProjection.isSeparateFrom(targetProjection)) {
-                return false;
+                return undefined;
             }
+
+            collisions.push(
+                new AxisPolygonProjectionCollision(
+                    normal,
+                    sourceProjection,
+                    targetProjection,
+                ),
+            );
         }
 
-        return true;
-    }
-
-    public projectPointsOntoVector(points: Point[], vector: Vector): PolygonProjection {
-        let min = Infinity;
-        let max = -Infinity;
-
-        for (const point of points) {
-            const projection = point.toVector().dot(vector);
-
-            if (projection < min) {
-                min = projection;
-            }
-
-            if (projection > max) {
-                max = projection;
-            }
-        }
-
-        return new PolygonProjection(min, max);
-    }
-}
-
-class PolygonProjection {
-    constructor(private min: number, private max: number) {}
-
-    public isSeparateFrom(other: PolygonProjection): boolean {
-        return this.max < other.min || other.max < this.min;
+        return collisions;
     }
 }

@@ -15,8 +15,8 @@ export class RandomPolygonSpawner {
     }
 
     public spawn(): Polygon {
-        const sides = Random.integer(3, 8);
-        const radius = Random.integer(20, 70);
+        const sides = Random.integer(3, 20);
+        const radius = Random.integer(20, 100);
         const vertices = [];
 
         for (let i = 0; i < sides; i++) {
@@ -31,9 +31,9 @@ export class RandomPolygonSpawner {
 
         polygon.shift(
             new Vector(
-                Random.integer(0, 2000),
+                Random.integer(0, 1800),
                 0,
-                Random.integer(0, 1000),
+                Random.integer(0, 600),
             ),
         );
 
@@ -54,6 +54,6 @@ class Random {
     }
 
     public static integer(min: number, max: number): number {
-        return min + Math.floor(Math.random() * Math.floor(max - min));
+        return min + Math.floor(Math.random() * Math.floor(max + 1 - min));
     }
 }

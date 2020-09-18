@@ -55,7 +55,7 @@ const rotationAnchorDragListener = new RotationAnchorDragListener(
 );
 
 const polygonSpawner = new RandomPolygonSpawner();
-const polygons = polygonSpawner.spawnMany(50);
+const polygons = polygonSpawner.spawnMany(20);
 
 for (const polygon of polygons) {
     polygonRepository.push(polygon);

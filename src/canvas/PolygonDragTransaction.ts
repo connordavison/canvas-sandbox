@@ -21,9 +21,8 @@ export class PolygonDragTransaction {
 
     public update(point: Point): void {
         const action = new PolygonDragAction(this.polygonShifter, this.lastPoint, point);
+        const shift = action.do();
 
-        if (action.do()) {
-            this.lastPoint = point;
-        }
+        this.lastPoint = shift.movePoint(this.lastPoint);
     }
 }

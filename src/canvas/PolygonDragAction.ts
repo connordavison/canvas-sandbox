@@ -1,6 +1,7 @@
 import { Action } from 'app/canvas/Action';
 import { Point } from 'app/canvas/Point';
 import { PolygonShifter } from 'app/canvas/PolygonShifter';
+import { Vector } from 'app/canvas/Vector';
 
 export class PolygonDragAction implements Action {
     constructor(
@@ -9,7 +10,7 @@ export class PolygonDragAction implements Action {
         private end: Point,
     ) {}
 
-    public do(): boolean {
+    public do(): Vector {
         return this.move(this.start, this.end);
     }
 
@@ -21,7 +22,7 @@ export class PolygonDragAction implements Action {
         return `move polygon from ${this.start} to ${this.end}`;
     }
 
-    private move(start: Point, end: Point): boolean {
-        return this.polygonShifter.shift(start.vectorTo(end));
+    private move(start: Point, end: Point): Vector {
+        return this.polygonShifter.shift(start, end);
     }
 }
