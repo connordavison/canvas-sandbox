@@ -1,8 +1,8 @@
 import { Point } from 'app/canvas/Point';
 import { RenderingContext } from 'app/canvas/RenderingContext';
 
-const MINOR_INTERVAL = 25;
-const MAJOR_INTERVAL = 250;
+const MINOR_INTERVAL = 50;
+const MAJOR_INTERVAL = 500;
 
 export class GridLayerPainter {
     constructor(private context: RenderingContext) {}
