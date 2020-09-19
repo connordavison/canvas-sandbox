@@ -9,7 +9,9 @@ export class RotationAnchorLayerPainter implements LayerPainter {
     ) {}
 
     public paint(): void {
-        for (const anchor of this.repository.findAll()) {
+        const anchor = this.repository.get();
+
+        if (anchor) {
             this.painter.paint(anchor);
         }
     }

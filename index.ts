@@ -20,7 +20,6 @@ import { PolygonShifterFactory } from 'app/canvas/PolygonShifterFactory';
 import { RandomPolygonSpawner } from 'app/canvas/RandomPolygonSpawner';
 import { RedoHotkey } from 'app/canvas/hotkeys/RedoHotkey';
 import { RenderingContext } from 'app/canvas/RenderingContext';
-import { RotationAnchor } from 'app/canvas/RotationAnchor';
 import { RotationAnchorCollisionDetector } from 'app/canvas/RotationAnchorCollisionDetector';
 import { RotationAnchorDragListener } from 'app/canvas/RotationAnchorDragListener';
 import { RotationAnchorLayerPainter } from 'app/canvas/RotationAnchorLayerPainter';
@@ -29,6 +28,8 @@ import { RotationAnchorRepository } from 'app/canvas/RotationAnchorRepository';
 import { ScrollListener } from 'app/canvas/ScrollListener';
 import { UndoHotkey } from 'app/canvas/hotkeys/UndoHotkey';
 import { WorldPainter } from 'app/canvas/WorldPainter';
+import { PolygonSelectListener } from 'app/canvas/PolygonSelectListener';
+import { PolygonSelector } from 'app/canvas/PolygonSelector';
 
 const canvas = document.createElement('canvas');
 
@@ -67,11 +68,14 @@ const polygons = polygonSpawner.spawnMany(20);
 
 for (const polygon of polygons) {
     polygonRepository.push(polygon);
-    rotationAnchorRepository.push(new RotationAnchor(polygon));
 }
+
+const polygonSelector = new PolygonSelector(rotationAnchorRepository);
+const polygonSelectListener = new PolygonSelectListener(polygonRepository, polygonSelector);
 
 const mouseEventRouter = new MouseEventRouter([
     rotationAnchorDragListener,
+    polygonSelectListener,
     polygonDragListener,
     new CanvasDragListener(camera),
 ], camera);
