@@ -12,6 +12,22 @@ export class AxisAlignedBoundingBox {
         return point.gte(this.min) && point.lte(this.max);
     }
 
+    public getLeft(): number {
+        return this.min.getX();
+    }
+
+    public getRight(): number {
+        return this.max.getX();
+    }
+
+    public getTop(): number {
+        return this.min.getZ();
+    }
+
+    public getBottom(): number {
+        return this.max.getZ();
+    }
+
     public getCenter(): Point {
         return this.min.toVector()
             .add(this.max.toVector())

@@ -8,6 +8,10 @@ export class Vector {
         private readonly z: number,
     ) {}
 
+    public static zero(): Vector {
+        return new Vector(0, 0, 0);
+    }
+
     public add(vector: Vector): Vector {
         return new Vector(
             this.x + vector.x,

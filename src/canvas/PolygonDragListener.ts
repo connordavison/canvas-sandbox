@@ -4,6 +4,7 @@ import { MouseListener } from 'app/canvas/MouseListener';
 import { ActionHistory } from 'app/canvas/ActionHistory';
 import { PolygonDragTransaction } from 'app/canvas/PolygonDragTransaction';
 import { PolygonShifterFactory } from 'app/canvas/PolygonShifterFactory';
+import { Lockable } from 'app/canvas/Lockable';
 
 export class PolygonDragListener implements MouseListener {
     private transaction?: PolygonDragTransaction;
@@ -14,7 +15,7 @@ export class PolygonDragListener implements MouseListener {
         private actionHistory: ActionHistory,
     ) {}
 
-    public onMouseDown(point: Point): void {
+    public onMouseDown(point: Point, lock: Lockable<MouseListener>): void {
         const targetPolygon = this.polygonRepository.findAtPoint(point);
 
         if (targetPolygon) {
@@ -22,6 +23,7 @@ export class PolygonDragListener implements MouseListener {
                 point,
                 this.polygonShifterFactory.createForPolygon(targetPolygon),
             );
+            lock.lock(this);
         }
     }
 

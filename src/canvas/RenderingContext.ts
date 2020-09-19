@@ -1,8 +1,12 @@
-import { Dimensions } from 'app/canvas/Dimensions';
+import { Camera } from 'app/canvas/Camera';
+import { AxisAlignedBoundingBox } from 'app/canvas/collision/AxisAlignedBoundingBox';
 import { Point } from 'app/canvas/Point';
 
 export class RenderingContext {
-    constructor(private context: CanvasRenderingContext2D) {}
+    constructor(
+        private context: CanvasRenderingContext2D,
+        private camera: Camera,
+    ) {}
 
     public clear(): void {
         const canvas = this.context.canvas;
@@ -10,10 +14,13 @@ export class RenderingContext {
         this.context.clearRect(0, 0, canvas.width, canvas.height);
     }
 
-    public getDimensions(): Dimensions {
+    public getDimensions(): AxisAlignedBoundingBox {
         const canvas = this.context.canvas;
 
-        return new Dimensions(canvas.width, 0, canvas.height);
+        const topLeft = this.camera.invert(new Point(0, 0, 0))
+        const bottomRight = this.camera.invert(new Point(canvas.width, 0, canvas.height));
+
+        return new AxisAlignedBoundingBox(topLeft, bottomRight);
     }
 
     public fitToScreen(): void {
@@ -53,14 +60,21 @@ export class RenderingContext {
     }
 
     public lineTo(point: Point): void {
+        point = this.camera.apply(point);
+
         this.context.lineTo(point.getX(), point.getZ());
     }
 
     public moveTo(point: Point): void {
+        point = this.camera.apply(point);
+
         this.context.moveTo(point.getX(), point.getZ());
     }
 
     public drawCircle(origin: Point, radius: number): void {
+        origin = this.camera.apply(origin);
+        radius = this.camera.applyZoom(radius);
+
         this.beginPath();
         this.context.arc(origin.getX(), origin.getZ(), radius, 0, 2 * Math.PI);
         this.closePath();

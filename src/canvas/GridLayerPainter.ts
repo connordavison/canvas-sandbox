@@ -15,29 +15,34 @@ export class GridLayerPainter {
     }
 
     private strokeInterval(interval: number) {
-        const dimensions = this.context.getDimensions();
-        const width = dimensions.getWidth();
-        const depth = dimensions.getDepth();
+        const box = this.context.getDimensions();
 
-        for (let x = interval; x < dimensions.getWidth(); x += interval) {
-            this.strokeVertical(x, depth);
-            for (let z = interval; z < dimensions.getDepth(); z+= interval) {
-                this.strokeHorizontal(z, width);
+        const left = Math.floor(box.getLeft() / interval) * interval;
+        const right = box.getRight();
+
+        const top = Math.floor(box.getTop() / interval) * interval;
+        const bottom = box.getBottom();
+
+        for (let x = left; x < right; x += interval) {
+            this.strokeVertical(top, bottom, x);
+
+            for (let z = top; z < bottom; z+= interval) {
+                this.strokeHorizontal(left, right, z);
             }
         }
     }
 
-    private strokeHorizontal(z: number, width: number): void {
+    private strokeVertical(top: number, bottom: number, x: number): void {
         this.context.strokeLine(
-            new Point(0, 0, z),
-            new Point(width, 0, z),
+            new Point(x, 0, top),
+            new Point(x, 0, bottom),
         );
     }
 
-    private strokeVertical(x: number, depth: number): void {
+    private strokeHorizontal(left: number, right: number, z: number): void {
         this.context.strokeLine(
-            new Point(x, 0, 0),
-            new Point(x, 0, depth),
+            new Point(left, 0, z),
+            new Point(right, 0, z),
         );
     }
 }

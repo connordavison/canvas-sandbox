@@ -1,4 +1,6 @@
 import { ActionHistory } from 'app/canvas/ActionHistory';
+import { Camera } from 'app/canvas/Camera';
+import { CanvasDragListener } from 'app/canvas/CanvasDragListener';
 import { AxisAlignedBoundingBoxFactory } from 'app/canvas/collision/AxisAlignedBoundingBoxFactory';
 import { CollisionDetector } from 'app/canvas/collision/CollisionDetector';
 import { SeparatingAxisCollisionDetector } from 'app/canvas/collision/SeparatingAxisCollisionDetector';
@@ -6,6 +8,10 @@ import { Dimensions } from 'app/canvas/Dimensions';
 import { GridLayerPainter } from 'app/canvas/GridLayerPainter';
 import { KeyboardEventRouter } from 'app/canvas/KeyboardEventRouter';
 import { MouseEventRouter } from 'app/canvas/MouseEventRouter';
+import { PanDownHotkey } from 'app/canvas/PanDownHotkey';
+import { PanLeftHotkey } from 'app/canvas/PanLeftHotkey';
+import { PanRightHotkey } from 'app/canvas/PanRightHotkey';
+import { PanUpHotkey } from 'app/canvas/PanUpHotkey';
 import { PolygonDragListener } from 'app/canvas/PolygonDragListener';
 import { PolygonLayerPainter } from 'app/canvas/PolygonLayerPainter';
 import { PolygonPainter } from 'app/canvas/PolygonPainter';
@@ -20,12 +26,14 @@ import { RotationAnchorDragListener } from 'app/canvas/RotationAnchorDragListene
 import { RotationAnchorLayerPainter } from 'app/canvas/RotationAnchorLayerPainter';
 import { RotationAnchorPainter } from 'app/canvas/RotationAnchorPainter';
 import { RotationAnchorRepository } from 'app/canvas/RotationAnchorRepository';
+import { ScrollListener } from 'app/canvas/ScrollListener';
 import { UndoHotkey } from 'app/canvas/UndoHotkey';
 import { WorldPainter } from 'app/canvas/WorldPainter';
 
 const canvas = document.createElement('canvas');
 
-const renderingContext = new RenderingContext(canvas.getContext('2d'));
+const camera = new Camera();
+const renderingContext = new RenderingContext(canvas.getContext('2d'), camera);
 const gridLayerPainter = new GridLayerPainter(renderingContext);
 const polygonPainter = new PolygonPainter(renderingContext);
 
@@ -62,7 +70,11 @@ for (const polygon of polygons) {
     rotationAnchorRepository.push(new RotationAnchor(polygon));
 }
 
-const mouseEventRouter = new MouseEventRouter([polygonDragListener, rotationAnchorDragListener]);
+const mouseEventRouter = new MouseEventRouter([
+    rotationAnchorDragListener,
+    polygonDragListener,
+    new CanvasDragListener(camera),
+], camera);
 
 mouseEventRouter.register(document);
 
@@ -72,14 +84,20 @@ const worldPainter = new WorldPainter(renderingContext, [
     rotationAnchorLayerPainter,
 ]);
 
-const undoHotkey = new UndoHotkey(actionHistory);
-const redoHotkey = new RedoHotkey(actionHistory);
 const keyboardEventRouter = new KeyboardEventRouter({
-    'z': undoHotkey,
-    'x': redoHotkey,
+    'z': new UndoHotkey(actionHistory),
+    'x': new RedoHotkey(actionHistory),
+    'ArrowLeft': new PanLeftHotkey(camera),
+    'ArrowRight': new PanRightHotkey(camera),
+    'ArrowUp': new PanUpHotkey(camera),
+    'ArrowDown': new PanDownHotkey(camera),
 });
 
 keyboardEventRouter.register(document);
+
+const scrollListener = new ScrollListener(camera);
+
+scrollListener.register(document);
 
 const ticksPerSecond = 60;
 const msPerTick = 1000 / ticksPerSecond;

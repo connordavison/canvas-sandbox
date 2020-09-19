@@ -20,6 +20,10 @@ export class Point {
         return this.z;
     }
 
+    public scale(factor: number): Point {
+        return new Point(this.x * factor, this.y * factor, this.z * factor);
+    }
+
     public getAngleBetween(a: Point, b: Point): number {
         const angle = this.vectorTo(a).angle(this.vectorTo(b));
 
