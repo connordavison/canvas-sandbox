@@ -4,36 +4,43 @@ import { Dimensions } from 'app/canvas/Dimensions';
 
 export class AxisAlignedBoundingBoxFactory {
     public create(points: Point[]): AxisAlignedBoundingBox {
-        const min = new Point(Infinity, Infinity, Infinity);
-        const max = new Point(-Infinity, -Infinity, -Infinity);
+        let minX = Infinity;
+        let minY = Infinity;
+        let minZ = Infinity;
+        let maxX = -Infinity;
+        let maxY = -Infinity;
+        let maxZ = -Infinity;
 
         for (const point of points) {
-            if (point.getX() < min.getX()) {
-                min.setX(point.getX());
+            if (point.getX() < minX) {
+                minX = point.getX();
             }
 
-            if (point.getY() < min.getY()) {
-                min.setY(point.getY());
+            if (point.getY() < minY) {
+                minY = point.getY();
             }
 
-            if (point.getZ() < min.getZ()) {
-                min.setZ(point.getZ());
+            if (point.getZ() < minZ) {
+                minZ = point.getZ();
             }
 
-            if (point.getX() > max.getX()) {
-                max.setX(point.getX());
+            if (point.getX() > maxX) {
+                maxX = point.getX();
             }
 
-            if (point.getY() > max.getY()) {
-                max.setY(point.getY());
+            if (point.getY() > maxY) {
+                maxY = point.getY();
             }
 
-            if (point.getZ() > max.getZ()) {
-                max.setZ(point.getZ());
+            if (point.getZ() > maxZ) {
+                maxZ = point.getZ();
             }
         }
 
-        return new AxisAlignedBoundingBox(min, max);
+        return new AxisAlignedBoundingBox(
+            new Point(minX, minY, minZ),
+            new Point(maxX, maxY, maxZ),
+        );
     }
 
     public createAboutPoint(point: Point, dimensions: Dimensions): AxisAlignedBoundingBox {

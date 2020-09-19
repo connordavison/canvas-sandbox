@@ -3,29 +3,17 @@ import { Vector } from 'app/canvas/Vector';
 
 export class Point {
     constructor(
-        private x: number,
-        private y: number,
-        private z: number,
+        private readonly x: number,
+        private readonly y: number,
+        private readonly z: number,
     ) {}
-
-    public setX(x: number): void {
-        this.x = x;
-    }
 
     public getX(): number {
         return this.x;
     }
 
-    public setY(y: number): void {
-        this.y = y;
-    }
-
     public getY(): number {
         return this.y;
-    }
-
-    public setZ(z: number): void {
-        this.z = z;
     }
 
     public getZ(): number {

@@ -3,9 +3,9 @@ import { Point } from 'app/canvas/Point';
 
 export class Vector {
     constructor(
-        private x: number,
-        private y: number,
-        private z: number,
+        private readonly x: number,
+        private readonly y: number,
+        private readonly z: number,
     ) {}
 
     public add(vector: Vector): Vector {
