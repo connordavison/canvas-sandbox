@@ -1,8 +1,6 @@
-import { Lockable } from 'app/canvas/Lockable';
+import { DragTransaction } from 'app/canvas/DragTransaction';
 import { Point } from 'app/canvas/Point';
 
 export interface MouseListener {
-    onMouseDown(point: Point, lock: Lockable<MouseListener>): void;
-    onMouseMove(point: Point): void;
-    onMouseUp(point: Point): void;
+    onMouseDown(point: Point): DragTransaction|void;
 }

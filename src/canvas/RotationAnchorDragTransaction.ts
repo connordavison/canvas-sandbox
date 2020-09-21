@@ -1,22 +1,28 @@
-import { Action } from 'app/canvas/Action';
+import { ActionHistory } from 'app/canvas/ActionHistory';
+import { DragTransaction } from 'app/canvas/DragTransaction';
 import { Point } from 'app/canvas/Point';
 import { RotationAnchor } from 'app/canvas/RotationAnchor';
 import { RotationAnchorDragAction } from 'app/canvas/RotationAnchorDragAction';
 
-export class RotationAnchorDragTransaction {
+export class RotationAnchorDragTransaction implements DragTransaction {
     private start: Point;
 
-    constructor(private anchor: RotationAnchor) {
+    constructor(
+        private anchor: RotationAnchor,
+        private actionHistory: ActionHistory,
+    ) {
         this.start = anchor.getAbsolutePosition();
     }
 
-    public commit(position: Point): Action {
+    public commit(position: Point): void {
         this.update(position);
 
-        return new RotationAnchorDragAction(
+        const completedAction = new RotationAnchorDragAction(
             this.anchor,
             this.anchor.getAngleTo(this.start),
         );
+
+        this.actionHistory.push(completedAction);
     }
 
     public update(position: Point): void {

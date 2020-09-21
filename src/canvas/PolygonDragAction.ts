@@ -1,28 +1,28 @@
 import { Action } from 'app/canvas/Action';
-import { Point } from 'app/canvas/Point';
+import { Polygon } from 'app/canvas/Polygon';
 import { PolygonShifter } from 'app/canvas/PolygonShifter';
 import { Vector } from 'app/canvas/Vector';
 
 export class PolygonDragAction implements Action {
     constructor(
+        private polygon: Polygon,
+        private vector: Vector,
         private polygonShifter: PolygonShifter,
-        private start: Point,
-        private end: Point,
     ) {}
 
     public do(): Vector {
-        return this.move(this.start, this.end);
+        return this.move(this.vector);
     }
 
     public undo(): void {
-        this.move(this.end, this.start);
+        this.move(this.vector.negate());
     }
 
     public toString(): string {
-        return `move polygon from ${this.start} to ${this.end}`;
+        return `move polygon by ${this.vector}`;
     }
 
-    private move(start: Point, end: Point): Vector {
-        return this.polygonShifter.shift(start, end);
+    private move(vector: Vector): Vector {
+        return this.polygonShifter.shift(this.polygon, vector);
     }
 }

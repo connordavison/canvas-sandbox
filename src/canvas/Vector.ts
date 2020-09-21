@@ -160,4 +160,8 @@ export class Vector {
     public toPoint(): Point {
         return new Point(this.x, this.y, this.z);
     }
+
+    public toString(): string {
+        return `{x: ${this.x}, y: ${this.y}, z: ${this.z}}`;
+    }
 }

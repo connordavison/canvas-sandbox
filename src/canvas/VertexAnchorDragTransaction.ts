@@ -1,4 +1,4 @@
-import { Action } from 'app/canvas/Action';
+import { ActionHistory } from 'app/canvas/ActionHistory';
 import { Point } from 'app/canvas/Point';
 import { VertexAnchor } from 'app/canvas/VertexAnchor';
 import { VertexAnchorDragAction } from 'app/canvas/VertexAnchorDragAction';
@@ -7,18 +7,19 @@ export class VertexAnchorDragTransaction {
     private start: Point;
     private lastPoint: Point;
 
-    constructor(private anchor: VertexAnchor) {
+    constructor(
+        private anchor: VertexAnchor,
+        private actionHistory: ActionHistory,
+    ) {
         this.start = anchor.getPosition();
         this.lastPoint = this.start;
     }
 
-    public commit(position: Point): Action {
+    public commit(position: Point): void {
         this.update(position);
 
-        return new VertexAnchorDragAction(
-            this.anchor,
-            this.start,
-            position,
+        this.actionHistory.push(
+            new VertexAnchorDragAction(this.anchor, this.start, position),
         );
     }
 

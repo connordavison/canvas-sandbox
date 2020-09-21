@@ -21,6 +21,6 @@ export class PolygonProjection {
     }
 
     public isSeparateFrom(other: PolygonProjection): boolean {
-        return this.end < other.start || other.end < this.start;
+        return this.end <= other.start || other.end <= this.start;
     }
 }

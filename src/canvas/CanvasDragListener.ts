@@ -1,32 +1,25 @@
 import { Camera } from 'app/canvas/Camera';
-import { Lockable } from 'app/canvas/Lockable';
-import { MouseListener } from 'app/canvas/MouseListener';
 import { Point } from 'app/canvas/Point';
+import { DragTransaction } from 'app/canvas/DragTransaction';
+import { MouseListener } from 'app/canvas/MouseListener';
 
-export class CanvasDragListener implements MouseListener {
+export class CanvasDragListener implements MouseListener, DragTransaction {
     private start: Point;
 
     constructor(private camera: Camera) {}
 
-    public onMouseDown(point: Point, lock: Lockable<MouseListener>): void {
+    public onMouseDown(point: Point): DragTransaction {
         this.start = point;
-        lock.lock(this);
+
+        return this;
     }
 
-    public onMouseMove(point: Point): void {
-        if (this.start) {
-            this.update(point);
-        }
+    public commit(point: Point): void {
+        this.update(point);
+        this.start = undefined;
     }
 
-    public onMouseUp(point: Point): void {
-        if (this.start) {
-            this.update(point);
-            this.start = undefined;
-        }
-    }
-
-    private update(point: Point): void {
+    public update(point: Point): void {
         this.camera.panByVector(this.start.vectorTo(point));
     }
 }

@@ -18,12 +18,4 @@ export class PolygonSelectListener implements MouseListener {
             this.polygonSelector.clear();
         }
     }
-
-    public onMouseMove(): void {
-        // noop
-    }
-
-    public onMouseUp(): void {
-        // noop
-    }
 }

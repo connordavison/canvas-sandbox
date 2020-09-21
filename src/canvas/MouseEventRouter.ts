@@ -1,10 +1,10 @@
 import { Camera } from 'app/canvas/Camera';
+import { DragTransaction } from 'app/canvas/DragTransaction';
 import { MouseListener } from 'app/canvas/MouseListener';
-import { MutexLock } from 'app/canvas/MutexLock';
 import { Point } from 'app/canvas/Point';
 
 export class MouseEventRouter {
-    private lock: MutexLock<MouseListener> = new MutexLock<MouseListener>();
+    private dragTransaction?: DragTransaction|void;
 
     constructor(
         private listeners: MouseListener[],
@@ -27,29 +27,24 @@ export class MouseEventRouter {
 
     public onMouseDown(position: Point): void {
         for (const listener of this.listeners) {
-            if (this.lock.isLocked()) {
+            if (this.dragTransaction) {
                 return;
             }
 
-            listener.onMouseDown(position, this.lock);
+            this.dragTransaction = listener.onMouseDown(position);
         }
     }
 
     public onMouseMove(position: Point): void {
-        const listener = this.lock.getLocker();
-
-        if (listener) {
-            listener.onMouseMove(position);
+        if (this.dragTransaction) {
+            this.dragTransaction.update(position);
         }
     }
 
     public onMouseUp(position: Point): void {
-        const listener = this.lock.getLocker();
-
-        if (listener) {
-            listener.onMouseUp(position);
-
-            this.lock.unlock();
+        if (this.dragTransaction) {
+            this.dragTransaction.commit(position);
+            this.dragTransaction = undefined;
         }
     }
 }

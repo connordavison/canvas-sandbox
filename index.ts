@@ -16,7 +16,7 @@ import { PolygonDragListener } from 'app/canvas/PolygonDragListener';
 import { PolygonLayerPainter } from 'app/canvas/PolygonLayerPainter';
 import { PolygonPainter } from 'app/canvas/PolygonPainter';
 import { PolygonRepository } from 'app/canvas/PolygonRepository';
-import { PolygonShifterFactory } from 'app/canvas/PolygonShifterFactory';
+import { PolygonDragTransactionFactory } from 'app/canvas/PolygonDragTransactionFactory';
 import { RandomPolygonSpawner } from 'app/canvas/RandomPolygonSpawner';
 import { RedoHotkey } from 'app/canvas/hotkeys/RedoHotkey';
 import { RenderingContext } from 'app/canvas/RenderingContext';
@@ -34,6 +34,7 @@ import { VertexAnchorPainter } from 'app/canvas/VertexAnchorPainter';
 import { VertexAnchorLayerPainter } from 'app/canvas/VertexAnchorLayerPainter';
 import { VertexAnchorRepository } from 'app/canvas/VertexAnchorRepository';
 import { VertexAnchorDragListener } from 'app/canvas/VertexAnchorDragListener';
+import { PolygonShifter } from 'app/canvas/PolygonShifter';
 
 const canvas = document.createElement('canvas');
 
@@ -49,8 +50,8 @@ const polygonLayerPainter = new PolygonLayerPainter(polygonRepository, polygonPa
 
 const actionHistory = new ActionHistory();
 const separatingAxisCollisionDetector = new SeparatingAxisCollisionDetector();
-const polygonShifterFactory = new PolygonShifterFactory(polygonRepository, separatingAxisCollisionDetector);
-const polygonDragListener = new PolygonDragListener(polygonRepository, polygonShifterFactory, actionHistory);
+const polygonShifter = new PolygonShifter(polygonRepository, separatingAxisCollisionDetector);
+const polygonDragTransactionFactory = new PolygonDragTransactionFactory(polygonShifter, actionHistory);
 
 const rotationAnchorPainter = new RotationAnchorPainter(renderingContext);
 
@@ -62,15 +63,9 @@ const rotationAnchorCollisionDetector = new RotationAnchorCollisionDetector(
 const rotationAnchorRepository = new RotationAnchorRepository(rotationAnchorCollisionDetector);
 const rotationAnchorLayerPainter = new RotationAnchorLayerPainter(rotationAnchorRepository, rotationAnchorPainter);
 
-const rotationAnchorDragListener = new RotationAnchorDragListener(
-    rotationAnchorRepository,
-    actionHistory,
-);
-
 const vertexAnchorRepository = new VertexAnchorRepository();
 const vertexAnchorPainter = new VertexAnchorPainter(renderingContext);
 const vertexAnchorLayerPainter = new VertexAnchorLayerPainter(vertexAnchorRepository, vertexAnchorPainter);
-const vertexAnchorDragListener = new VertexAnchorDragListener(vertexAnchorRepository, actionHistory);
 
 const polygonSpawner = new RandomPolygonSpawner();
 const polygons = polygonSpawner.spawnMany(20);
@@ -80,13 +75,12 @@ for (const polygon of polygons) {
 }
 
 const polygonSelector = new PolygonSelector(rotationAnchorRepository, vertexAnchorRepository);
-const polygonSelectListener = new PolygonSelectListener(polygonRepository, polygonSelector);
 
 const mouseEventRouter = new MouseEventRouter([
-    rotationAnchorDragListener,
-    vertexAnchorDragListener,
-    polygonSelectListener,
-    polygonDragListener,
+    new RotationAnchorDragListener(rotationAnchorRepository, actionHistory),
+    new VertexAnchorDragListener(vertexAnchorRepository, actionHistory),
+    new PolygonSelectListener(polygonRepository, polygonSelector),
+    new PolygonDragListener(polygonRepository, polygonDragTransactionFactory),
     new CanvasDragListener(camera),
 ], camera);
 
