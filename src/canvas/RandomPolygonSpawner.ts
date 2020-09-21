@@ -15,7 +15,7 @@ export class RandomPolygonSpawner {
     }
 
     public spawn(): Polygon {
-        const sides = Random.integer(3, 20);
+        const sides = Random.integer(3, 8);
         const radius = Random.integer(20, 100);
         const vertices = [];
 

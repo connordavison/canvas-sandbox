@@ -30,6 +30,10 @@ import { UndoHotkey } from 'app/canvas/hotkeys/UndoHotkey';
 import { WorldPainter } from 'app/canvas/WorldPainter';
 import { PolygonSelectListener } from 'app/canvas/PolygonSelectListener';
 import { PolygonSelector } from 'app/canvas/PolygonSelector';
+import { VertexAnchorPainter } from 'app/canvas/VertexAnchorPainter';
+import { VertexAnchorLayerPainter } from 'app/canvas/VertexAnchorLayerPainter';
+import { VertexAnchorRepository } from 'app/canvas/VertexAnchorRepository';
+import { VertexAnchorDragListener } from 'app/canvas/VertexAnchorDragListener';
 
 const canvas = document.createElement('canvas');
 
@@ -63,6 +67,11 @@ const rotationAnchorDragListener = new RotationAnchorDragListener(
     actionHistory,
 );
 
+const vertexAnchorRepository = new VertexAnchorRepository();
+const vertexAnchorPainter = new VertexAnchorPainter(renderingContext);
+const vertexAnchorLayerPainter = new VertexAnchorLayerPainter(vertexAnchorRepository, vertexAnchorPainter);
+const vertexAnchorDragListener = new VertexAnchorDragListener(vertexAnchorRepository, actionHistory);
+
 const polygonSpawner = new RandomPolygonSpawner();
 const polygons = polygonSpawner.spawnMany(20);
 
@@ -70,11 +79,12 @@ for (const polygon of polygons) {
     polygonRepository.push(polygon);
 }
 
-const polygonSelector = new PolygonSelector(rotationAnchorRepository);
+const polygonSelector = new PolygonSelector(rotationAnchorRepository, vertexAnchorRepository);
 const polygonSelectListener = new PolygonSelectListener(polygonRepository, polygonSelector);
 
 const mouseEventRouter = new MouseEventRouter([
     rotationAnchorDragListener,
+    vertexAnchorDragListener,
     polygonSelectListener,
     polygonDragListener,
     new CanvasDragListener(camera),
@@ -86,6 +96,7 @@ const worldPainter = new WorldPainter(renderingContext, [
     gridLayerPainter,
     polygonLayerPainter,
     rotationAnchorLayerPainter,
+    vertexAnchorLayerPainter,
 ]);
 
 const keyboardEventRouter = new KeyboardEventRouter({

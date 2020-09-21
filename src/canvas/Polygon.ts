@@ -3,6 +3,7 @@ import { Vector } from 'app/canvas/Vector';
 import { Matrix } from 'app/canvas/Matrix';
 import { ConvexPolygonFace } from 'app/canvas/ConvexPolygonFace';
 import { PolygonProjection } from 'app/canvas/collision/PolygonProjection';
+import { VertexAnchor } from 'app/canvas/VertexAnchor';
 
 type PointPredicate = (point: Point) => boolean;
 
@@ -56,6 +57,16 @@ export class Polygon {
         }
 
         return faces;
+    }
+
+    public createVertexAnchors(): VertexAnchor[] {
+        const anchors = [];
+
+        for (let i = 0; i < this.points.length; i++) {
+            anchors.push(new VertexAnchor(this, i));
+        }
+
+        return anchors;
     }
 
     public getPoints(): Point[] {
@@ -119,6 +130,14 @@ export class Polygon {
                 .toVector()
                 .movePoint(center);
         });
+    }
+
+    public movePoint(id: number, vector: Vector): void {
+        if (this.points[id]) {
+            this.points[id] = vector.movePoint(this.points[id]);
+        } else {
+            throw 'Target point not a vertex of polygon';
+        }
     }
 
     public clone(): Polygon {
