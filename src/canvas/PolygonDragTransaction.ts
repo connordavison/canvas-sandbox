@@ -3,7 +3,7 @@ import { DragTransaction } from 'app/canvas/DragTransaction';
 import { Point } from 'app/canvas/Point';
 import { Polygon } from 'app/canvas/Polygon';
 import { PolygonDragAction } from 'app/canvas/PolygonDragAction';
-import { PolygonShifter } from 'app/canvas/PolygonShifter';
+import { PolygonMover } from 'app/canvas/PolygonMover';
 
 export class PolygonDragTransaction implements DragTransaction {
     private lastPoint: Point;
@@ -11,7 +11,7 @@ export class PolygonDragTransaction implements DragTransaction {
     constructor(
         private start: Point,
         private polygon: Polygon,
-        private polygonShifter: PolygonShifter,
+        private polygonShifter: PolygonMover,
         private actionHistory: ActionHistory
     ) {
         this.lastPoint = start;

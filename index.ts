@@ -34,7 +34,7 @@ import { VertexAnchorPainter } from 'app/canvas/VertexAnchorPainter';
 import { VertexAnchorLayerPainter } from 'app/canvas/VertexAnchorLayerPainter';
 import { VertexAnchorRepository } from 'app/canvas/VertexAnchorRepository';
 import { VertexAnchorDragListener } from 'app/canvas/VertexAnchorDragListener';
-import { PolygonShifter } from 'app/canvas/PolygonShifter';
+import { PolygonMover } from 'app/canvas/PolygonMover';
 
 const canvas = document.createElement('canvas');
 
@@ -50,8 +50,8 @@ const polygonLayerPainter = new PolygonLayerPainter(polygonRepository, polygonPa
 
 const actionHistory = new ActionHistory();
 const separatingAxisCollisionDetector = new SeparatingAxisCollisionDetector();
-const polygonShifter = new PolygonShifter(polygonRepository, separatingAxisCollisionDetector);
-const polygonDragTransactionFactory = new PolygonDragTransactionFactory(polygonShifter, actionHistory);
+const polygonMover = new PolygonMover(polygonRepository, separatingAxisCollisionDetector);
+const polygonDragTransactionFactory = new PolygonDragTransactionFactory(polygonMover, actionHistory);
 
 const rotationAnchorPainter = new RotationAnchorPainter(renderingContext);
 
@@ -60,7 +60,7 @@ const rotationAnchorCollisionDetector = new RotationAnchorCollisionDetector(
     collisionDetector,
     new Dimensions(15, 0, 15),
 );
-const rotationAnchorRepository = new RotationAnchorRepository(rotationAnchorCollisionDetector);
+const rotationAnchorRepository = new RotationAnchorRepository(rotationAnchorCollisionDetector, polygonMover);
 const rotationAnchorLayerPainter = new RotationAnchorLayerPainter(rotationAnchorRepository, rotationAnchorPainter);
 
 const vertexAnchorRepository = new VertexAnchorRepository();

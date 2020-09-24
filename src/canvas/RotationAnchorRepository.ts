@@ -1,4 +1,6 @@
 import { Point } from 'app/canvas/Point';
+import { Polygon } from 'app/canvas/Polygon';
+import { PolygonMover } from 'app/canvas/PolygonMover';
 import { RotationAnchor } from 'app/canvas/RotationAnchor';
 import { RotationAnchorCollisionDetector } from 'app/canvas/RotationAnchorCollisionDetector';
 
@@ -7,10 +9,11 @@ export class RotationAnchorRepository {
 
     constructor(
         private collisionDetector: RotationAnchorCollisionDetector,
+        private polygonMover: PolygonMover,
     ) {}
 
-    public set(anchor: RotationAnchor): void {
-        this.anchor = anchor;
+    public create(polygon: Polygon): void {
+        this.anchor = new RotationAnchor(polygon, this.polygonMover);
     }
 
     public get(): RotationAnchor|undefined {

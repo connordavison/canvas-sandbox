@@ -34,14 +34,6 @@ export class Point {
         return angle;
     }
 
-    public getDistanceSignFromXZLine(a: Point, b: Point): number {
-        const minSignedDistanceFromABToThis
-            = (this.getX() - a.getX()) * (b.getZ() - a.getZ())
-            - (this.getZ() - a.getZ()) * (b.getX() - a.getX());
-
-        return minSignedDistanceFromABToThis < 0 ? -1 : 1;
-    }
-
     public distance(point: Point): number {
         return Math.sqrt(
             (point.x - this.x) ** 2

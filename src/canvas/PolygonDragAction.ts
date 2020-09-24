@@ -1,13 +1,13 @@
 import { Action } from 'app/canvas/Action';
 import { Polygon } from 'app/canvas/Polygon';
-import { PolygonShifter } from 'app/canvas/PolygonShifter';
+import { PolygonMover } from 'app/canvas/PolygonMover';
 import { Vector } from 'app/canvas/Vector';
 
 export class PolygonDragAction implements Action {
     constructor(
         private polygon: Polygon,
         private vector: Vector,
-        private polygonShifter: PolygonShifter,
+        private polygonShifter: PolygonMover,
     ) {}
 
     public do(): Vector {

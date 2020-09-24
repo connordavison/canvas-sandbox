@@ -123,9 +123,17 @@ export class Polygon {
     }
 
     public transform(matrix: Matrix): void {
+        this.points = this.getPointsUnderTransformation(matrix);
+    }
+
+    public projectTransform(matrix: Matrix): Polygon {
+        return new Polygon(this.getPointsUnderTransformation(matrix));
+    }
+
+    private getPointsUnderTransformation(matrix: Matrix): Point[] {
         const center = this.getCenter();
 
-        this.points = this.points.map((point) => {
+        return this.points.map((point) => {
             return matrix.applyToPoint(point.relativeTo(center))
                 .toVector()
                 .movePoint(center);

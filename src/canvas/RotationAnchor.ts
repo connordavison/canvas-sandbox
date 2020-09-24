@@ -1,9 +1,12 @@
-import { Matrix } from 'app/canvas/Matrix';
 import { Point } from 'app/canvas/Point';
 import { Polygon } from 'app/canvas/Polygon';
+import { PolygonMover } from 'app/canvas/PolygonMover';
 
 export class RotationAnchor {
-    constructor(private target: Polygon) {}
+    constructor(
+        private target: Polygon,
+        private polygonMover: PolygonMover,
+    ) {}
 
     public getRadius(): number {
         return 5;
@@ -35,6 +38,6 @@ export class RotationAnchor {
     }
 
     public rotateAngleAboutPoint(angle: number): void {
-        this.target.transform(Matrix.rotateXZ(angle));
+        this.polygonMover.rotate(this.target, angle);
     }
 }

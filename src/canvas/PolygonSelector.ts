@@ -1,5 +1,4 @@
 import { Polygon } from 'app/canvas/Polygon';
-import { RotationAnchor } from 'app/canvas/RotationAnchor';
 import { RotationAnchorRepository } from 'app/canvas/RotationAnchorRepository';
 import { VertexAnchorRepository } from 'app/canvas/VertexAnchorRepository';
 
@@ -10,7 +9,7 @@ export class PolygonSelector {
     ) {}
 
     public select(polygon: Polygon): void {
-        this.rotationAnchorRepository.set(new RotationAnchor(polygon));
+        this.rotationAnchorRepository.create(polygon);
         this.vertexAnchorRepository.set(polygon.createVertexAnchors());
     }
 

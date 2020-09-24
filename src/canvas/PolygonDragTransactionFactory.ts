@@ -2,11 +2,11 @@ import { ActionHistory } from 'app/canvas/ActionHistory';
 import { Point } from 'app/canvas/Point';
 import { Polygon } from 'app/canvas/Polygon';
 import { PolygonDragTransaction } from 'app/canvas/PolygonDragTransaction';
-import { PolygonShifter } from 'app/canvas/PolygonShifter';
+import { PolygonMover } from 'app/canvas/PolygonMover';
 
 export class PolygonDragTransactionFactory {
     constructor(
-        private polygonShifter: PolygonShifter,
+        private polygonShifter: PolygonMover,
         private actionHistory: ActionHistory,
     ) {}
 
