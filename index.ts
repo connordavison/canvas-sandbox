@@ -114,6 +114,7 @@ const ticksPerSecond = 60;
 const msPerTick = 1000 / ticksPerSecond;
 
 document.body.appendChild(canvas);
+renderingContext.fitToScreen();
 
 setInterval(() => {
     worldPainter.paint();
