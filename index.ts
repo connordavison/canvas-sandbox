@@ -1,24 +1,27 @@
 import { ActionHistory } from 'app/canvas/ActionHistory';
 import { Camera } from 'app/canvas/Camera';
 import { CanvasDragListener } from 'app/canvas/CanvasDragListener';
-import { AxisAlignedBoundingBoxFactory } from 'app/canvas/collision/AxisAlignedBoundingBoxFactory';
 import { CollisionDetector } from 'app/canvas/collision/CollisionDetector';
 import { SeparatingAxisCollisionDetector } from 'app/canvas/collision/SeparatingAxisCollisionDetector';
 import { Dimensions } from 'app/canvas/Dimensions';
 import { GridLayerPainter } from 'app/canvas/GridLayerPainter';
-import { KeyboardEventRouter } from 'app/canvas/KeyboardEventRouter';
-import { MouseEventRouter } from 'app/canvas/MouseEventRouter';
 import { PanDownHotkey } from 'app/canvas/hotkeys/PanDownHotkey';
 import { PanLeftHotkey } from 'app/canvas/hotkeys/PanLeftHotkey';
 import { PanRightHotkey } from 'app/canvas/hotkeys/PanRightHotkey';
 import { PanUpHotkey } from 'app/canvas/hotkeys/PanUpHotkey';
+import { RedoHotkey } from 'app/canvas/hotkeys/RedoHotkey';
+import { UndoHotkey } from 'app/canvas/hotkeys/UndoHotkey';
+import { KeyboardEventRouter } from 'app/canvas/KeyboardEventRouter';
+import { MouseEventRouter } from 'app/canvas/MouseEventRouter';
 import { PolygonDragListener } from 'app/canvas/PolygonDragListener';
+import { PolygonDragTransactionFactory } from 'app/canvas/PolygonDragTransactionFactory';
 import { PolygonLayerPainter } from 'app/canvas/PolygonLayerPainter';
+import { PolygonMover } from 'app/canvas/PolygonMover';
 import { PolygonPainter } from 'app/canvas/PolygonPainter';
 import { PolygonRepository } from 'app/canvas/PolygonRepository';
-import { PolygonDragTransactionFactory } from 'app/canvas/PolygonDragTransactionFactory';
+import { PolygonSelectListener } from 'app/canvas/PolygonSelectListener';
+import { PolygonSelector } from 'app/canvas/PolygonSelector';
 import { RandomPolygonSpawner } from 'app/canvas/RandomPolygonSpawner';
-import { RedoHotkey } from 'app/canvas/hotkeys/RedoHotkey';
 import { RenderingContext } from 'app/canvas/RenderingContext';
 import { RotationAnchorCollisionDetector } from 'app/canvas/RotationAnchorCollisionDetector';
 import { RotationAnchorDragListener } from 'app/canvas/RotationAnchorDragListener';
@@ -26,15 +29,11 @@ import { RotationAnchorLayerPainter } from 'app/canvas/RotationAnchorLayerPainte
 import { RotationAnchorPainter } from 'app/canvas/RotationAnchorPainter';
 import { RotationAnchorRepository } from 'app/canvas/RotationAnchorRepository';
 import { ScrollListener } from 'app/canvas/ScrollListener';
-import { UndoHotkey } from 'app/canvas/hotkeys/UndoHotkey';
-import { WorldPainter } from 'app/canvas/WorldPainter';
-import { PolygonSelectListener } from 'app/canvas/PolygonSelectListener';
-import { PolygonSelector } from 'app/canvas/PolygonSelector';
-import { VertexAnchorPainter } from 'app/canvas/VertexAnchorPainter';
-import { VertexAnchorLayerPainter } from 'app/canvas/VertexAnchorLayerPainter';
-import { VertexAnchorRepository } from 'app/canvas/VertexAnchorRepository';
 import { VertexAnchorDragListener } from 'app/canvas/VertexAnchorDragListener';
-import { PolygonMover } from 'app/canvas/PolygonMover';
+import { VertexAnchorLayerPainter } from 'app/canvas/VertexAnchorLayerPainter';
+import { VertexAnchorPainter } from 'app/canvas/VertexAnchorPainter';
+import { VertexAnchorRepository } from 'app/canvas/VertexAnchorRepository';
+import { WorldPainter } from 'app/canvas/WorldPainter';
 
 const canvas = document.createElement('canvas');
 
@@ -42,8 +41,6 @@ const camera = new Camera();
 const renderingContext = new RenderingContext(canvas.getContext('2d'), camera);
 const gridLayerPainter = new GridLayerPainter(renderingContext);
 const polygonPainter = new PolygonPainter(renderingContext);
-
-const aabbFactory = new AxisAlignedBoundingBoxFactory();
 const polygonRepository = new PolygonRepository();
 
 const polygonLayerPainter = new PolygonLayerPainter(polygonRepository, polygonPainter);
@@ -55,7 +52,7 @@ const polygonDragTransactionFactory = new PolygonDragTransactionFactory(polygonM
 
 const rotationAnchorPainter = new RotationAnchorPainter(renderingContext);
 
-const collisionDetector = new CollisionDetector(aabbFactory);
+const collisionDetector = new CollisionDetector();
 const rotationAnchorCollisionDetector = new RotationAnchorCollisionDetector(
     collisionDetector,
     new Dimensions(15, 0, 15),

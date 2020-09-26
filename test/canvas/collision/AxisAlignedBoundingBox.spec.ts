@@ -1,4 +1,5 @@
 import { AxisAlignedBoundingBox } from 'app/canvas/collision/AxisAlignedBoundingBox';
+import { Dimensions } from 'app/canvas/Dimensions';
 import { Point } from 'app/canvas/Point';
 import { expect } from 'chai';
 
@@ -46,5 +47,25 @@ describe('AxisAlignedBoundingBox', () => {
             expect(box.hasPoint(new Point(-Infinity, -Infinity, -Infinity))).to.be.true;
             expect(box.hasPoint(new Point(Infinity, Infinity, Infinity))).to.be.true;
         });
+    });
+
+    describe('#createAboutPoint', () => {
+        const point = new Point(0, 0, 0);
+        const dimensions = new Dimensions(100, 40, 80);
+
+        const box = AxisAlignedBoundingBox.createAboutPoint(point, dimensions);
+
+        it('should have in-bound points', () => {
+            const inBoundPoints = [
+                new Point(0, 0, 0),
+                new Point(50, 20, 40),
+                new Point(-50, -20, -40),
+                new Point(-10, 5, 5),
+            ];
+
+            for (const point of inBoundPoints) {
+                expect(box.hasPoint(point), point.toString()).to.be.true;
+            }
+        })
     });
 });

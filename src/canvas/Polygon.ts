@@ -4,6 +4,7 @@ import { Matrix } from 'app/canvas/Matrix';
 import { ConvexPolygonFace } from 'app/canvas/ConvexPolygonFace';
 import { PolygonProjection } from 'app/canvas/collision/PolygonProjection';
 import { VertexAnchor } from 'app/canvas/VertexAnchor';
+import { AxisAlignedBoundingBox } from 'app/canvas/collision/AxisAlignedBoundingBox';
 
 type PointPredicate = (point: Point) => boolean;
 
@@ -57,6 +58,46 @@ export class Polygon {
         }
 
         return faces;
+    }
+
+    public getBoundingBox(): AxisAlignedBoundingBox {
+        let minX = Infinity;
+        let minY = Infinity;
+        let minZ = Infinity;
+        let maxX = -Infinity;
+        let maxY = -Infinity;
+        let maxZ = -Infinity;
+
+        for (const point of this.points) {
+            if (point.getX() < minX) {
+                minX = point.getX();
+            }
+
+            if (point.getY() < minY) {
+                minY = point.getY();
+            }
+
+            if (point.getZ() < minZ) {
+                minZ = point.getZ();
+            }
+
+            if (point.getX() > maxX) {
+                maxX = point.getX();
+            }
+
+            if (point.getY() > maxY) {
+                maxY = point.getY();
+            }
+
+            if (point.getZ() > maxZ) {
+                maxZ = point.getZ();
+            }
+        }
+
+        return new AxisAlignedBoundingBox(
+            new Point(minX, minY, minZ),
+            new Point(maxX, maxY, maxZ),
+        );
     }
 
     public createVertexAnchors(): VertexAnchor[] {

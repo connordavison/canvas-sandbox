@@ -62,4 +62,42 @@ describe('Polygon', () => {
             expect(quadrangle.containsPoint(new Point(1.00001, 0, 3.00001))).to.be.false;
         });
     });
+
+
+    describe('#getBoundingBox', () => {
+        const points = [
+            new Point(5, 0, 5),
+            new Point(10, 5, 15),
+            new Point(0, -5, -5),
+            new Point(-5, -10, -15),
+        ];
+
+        const box = (new Polygon(points)).getBoundingBox();
+
+        it('should have in-bound points', () => {
+            const inBoundPoints = [
+                new Point(10, 5, 15),
+                new Point(0, 0, 0),
+                new Point(-5, -10, -15),
+                new Point(0, 0, 0),
+            ];
+
+            for (const point of inBoundPoints) {
+                expect(box.hasPoint(point), point.toString()).to.be.true;
+            }
+        });
+
+        it('should not have out-of-bound points', () => {
+            const outOfBoundPoints = [
+                new Point(-5, -10, -16),
+                new Point(-Infinity, 0, 0),
+                new Point(0, 1337, 0),
+                new Point(1E15, 1E16, 1E17),
+            ];
+
+            for (const point of outOfBoundPoints) {
+                expect(box.hasPoint(point), point.toString()).to.be.false;
+            }
+        });
+    });
 });
