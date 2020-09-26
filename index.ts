@@ -33,6 +33,7 @@ import { VertexAnchorDragListener } from 'app/canvas/VertexAnchorDragListener';
 import { VertexAnchorLayerPainter } from 'app/canvas/VertexAnchorLayerPainter';
 import { VertexAnchorPainter } from 'app/canvas/VertexAnchorPainter';
 import { VertexAnchorRepository } from 'app/canvas/VertexAnchorRepository';
+import { WindowResizeListener } from 'app/canvas/WindowResizeListener';
 import { WorldPainter } from 'app/canvas/WorldPainter';
 
 const canvas = document.createElement('canvas');
@@ -105,12 +106,15 @@ const scrollListener = new ScrollListener(camera);
 
 scrollListener.register(document);
 
+const windowResizeListener = new WindowResizeListener(renderingContext);
+
+windowResizeListener.register(window);
+
 const ticksPerSecond = 60;
 const msPerTick = 1000 / ticksPerSecond;
 
 document.body.appendChild(canvas);
 
 setInterval(() => {
-    renderingContext.fitToScreen();
     worldPainter.paint();
 }, msPerTick);
