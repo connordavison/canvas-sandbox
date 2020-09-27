@@ -7,15 +7,14 @@ export class SeparatingAxisCollisionDetector {
         source: Polygon,
         target: Polygon,
     ): AxisPolygonProjectionCollision|undefined {
-        const sourceCollisions = this.collidesOnFaces(source, target, source.getClockwiseFaces());
-        const targetCollisions = this.collidesOnFaces(source, target, target.getClockwiseFaces());
+        const faces = source.getClockwiseFaces().concat(target.getClockwiseFaces());
+        const collisions = this.collidesOnFaces(source, target, faces);
 
-        if (undefined === sourceCollisions || undefined === targetCollisions) {
+        if (undefined === collisions) {
             return undefined;
         }
 
-        const allCollisions = sourceCollisions.concat(targetCollisions);
-        const minCollision = allCollisions.sort((a: AxisPolygonProjectionCollision, b: AxisPolygonProjectionCollision) => {
+        const minCollision = collisions.sort((a: AxisPolygonProjectionCollision, b: AxisPolygonProjectionCollision) => {
             return a.getMagnitude() - b.getMagnitude();
         })[0];
 
@@ -42,8 +41,7 @@ export class SeparatingAxisCollisionDetector {
             collisions.push(
                 new AxisPolygonProjectionCollision(
                     normal,
-                    sourceProjection,
-                    targetProjection,
+                    targetProjection.reject(sourceProjection),
                 ),
             );
         }

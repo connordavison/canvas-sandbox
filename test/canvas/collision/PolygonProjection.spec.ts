@@ -2,24 +2,6 @@ import { PolygonProjection } from 'app/canvas/collision/PolygonProjection';
 import { expect } from 'chai';
 
 describe('PolygonProjection', () => {
-    describe('#getOverlap', () => {
-        it('should handle partial overlaps', () => {
-            const left = new PolygonProjection(-5, 2);
-            const right = new PolygonProjection(-1, 7);
-
-            expect(left.getOverlap(right)).to.equal(3);
-            expect(right.getOverlap(left)).to.equal(3);
-        });
-
-        it('should handle complete overlaps', () => {
-            const projection = new PolygonProjection(-8, 4);
-            const subprojection = new PolygonProjection(-3, 0);
-
-            expect(projection.getOverlap(subprojection)).to.equal(3);
-            expect(subprojection.getOverlap(projection)).to.equal(3);
-        });
-    });
-
     describe('#reject', () => {
         const tests = [
             { source: new PolygonProjection(2, 7), target: new PolygonProjection(5, 9), expected: 2 },

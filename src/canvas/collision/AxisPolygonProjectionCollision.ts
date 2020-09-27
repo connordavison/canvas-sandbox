@@ -1,18 +1,16 @@
-import { PolygonProjection } from 'app/canvas/collision/PolygonProjection';
 import { Vector } from 'app/canvas/Vector';
 
 export class AxisPolygonProjectionCollision {
     constructor(
         private axis: Vector,
-        private source: PolygonProjection,
-        private target: PolygonProjection,
+        private rejectionScalar: number,
     ) {}
 
     public getMagnitude(): number {
-        return this.source.getOverlap(this.target);
+        return Math.abs(this.rejectionScalar);
     }
 
     public getRejection(): Vector {
-        return this.axis.scale(this.target.reject(this.source));
+        return this.axis.scale(this.rejectionScalar);
     }
 }

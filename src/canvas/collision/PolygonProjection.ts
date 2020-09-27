@@ -1,10 +1,6 @@
 export class PolygonProjection {
     constructor(private start: number, private end: number) {}
 
-    public getOverlap(other: PolygonProjection): number {
-        return Math.min(this.end, other.end) - Math.max(this.start, other.start);
-    }
-
     public reject(other: PolygonProjection): number {
         if (this.isSeparateFrom(other)) {
             return 0;
