@@ -1,51 +1,42 @@
-import { SeparatingAxisCollisionDetector } from 'app/canvas/collision/SeparatingAxisCollisionDetector';
+import { TreeSearcher } from 'app/canvas/tree/TreeSearcher';
 import { Matrix } from 'app/canvas/Matrix';
 import { Polygon } from 'app/canvas/Polygon';
-import { PolygonRepository } from 'app/canvas/PolygonRepository';
 import { Vector } from 'app/canvas/Vector';
+import { PolygonCollisionDetector } from 'app/canvas/PolygonCollisionDetector';
+import { PolygonMoveCollisionTree } from 'app/canvas/PolygonMoveCollisionTree';
 
 export class PolygonMover {
     constructor(
-        private polygonRepository: PolygonRepository,
-        private collisionChecker: SeparatingAxisCollisionDetector,
+        private polygonCollisionDetector: PolygonCollisionDetector,
     ) {}
 
     public shift(polygon: Polygon, vector: Vector): Vector {
-        const projectedPolygon = polygon.projectShift(vector);
+        const searcher = new TreeSearcher<PolygonMoveCollisionTree>();
 
-        for (const otherPolygon of this.polygonRepository.findAll()) {
-            if (otherPolygon === polygon) {
-                continue;
-            }
+        const minimalLeaf = searcher.findMinimalLeaf(
+            new PolygonMoveCollisionTree(
+                vector,
+                vector,
+                polygon,
+                this.polygonCollisionDetector,
+            ),
+            5,
+        );
 
-            const collision = this.collisionChecker.collides(projectedPolygon, otherPolygon);
+        const shift = minimalLeaf?.getShift() ?? Vector.zero();
 
-            if (collision) {
-                return this.shift(polygon, vector.add(collision.getRejection()));
-            }
-        }
+        polygon.shift(shift);
 
-        polygon.shift(vector);
-
-        return vector;
+        return shift;
     }
 
     public rotate(polygon: Polygon, angle: number): void {
         const matrix = Matrix.rotateXZ(angle);
         const projectedPolygon = polygon.projectTransform(matrix);
+        const collisions = this.polygonCollisionDetector.findCollisions(projectedPolygon, [polygon]);
 
-        for (const otherPolygon of this.polygonRepository.findAll()) {
-            if (otherPolygon === polygon) {
-                continue;
-            }
-
-            const collision = this.collisionChecker.collides(projectedPolygon, otherPolygon);
-
-            if (collision) {
-                return;
-            }
+        if (collisions.length === 0) {
+            polygon.transform(matrix);
         }
-
-        polygon.transform(matrix);
     }
 }

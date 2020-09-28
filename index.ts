@@ -13,6 +13,7 @@ import { RedoHotkey } from 'app/canvas/hotkeys/RedoHotkey';
 import { UndoHotkey } from 'app/canvas/hotkeys/UndoHotkey';
 import { KeyboardEventRouter } from 'app/canvas/KeyboardEventRouter';
 import { MouseEventRouter } from 'app/canvas/MouseEventRouter';
+import { PolygonCollisionDetector } from 'app/canvas/PolygonCollisionDetector';
 import { PolygonDragListener } from 'app/canvas/PolygonDragListener';
 import { PolygonDragTransactionFactory } from 'app/canvas/PolygonDragTransactionFactory';
 import { PolygonLayerPainter } from 'app/canvas/PolygonLayerPainter';
@@ -48,7 +49,8 @@ const polygonLayerPainter = new PolygonLayerPainter(polygonRepository, polygonPa
 
 const actionHistory = new ActionHistory();
 const separatingAxisCollisionDetector = new SeparatingAxisCollisionDetector();
-const polygonMover = new PolygonMover(polygonRepository, separatingAxisCollisionDetector);
+const polygonCollisionDetector = new PolygonCollisionDetector(polygonRepository, separatingAxisCollisionDetector);
+const polygonMover = new PolygonMover(polygonCollisionDetector);
 const polygonDragTransactionFactory = new PolygonDragTransactionFactory(polygonMover, actionHistory);
 
 const rotationAnchorPainter = new RotationAnchorPainter(renderingContext);
@@ -66,7 +68,7 @@ const vertexAnchorPainter = new VertexAnchorPainter(renderingContext);
 const vertexAnchorLayerPainter = new VertexAnchorLayerPainter(vertexAnchorRepository, vertexAnchorPainter);
 
 const polygonSpawner = new RandomPolygonSpawner();
-const polygons = polygonSpawner.spawnMany(20);
+const polygons = polygonSpawner.spawnMany(25);
 
 for (const polygon of polygons) {
     polygonRepository.push(polygon);
