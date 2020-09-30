@@ -1,25 +1,6 @@
 {
     "name": "canvas-sandbox",
-    "version": "1.0.0",
-    "description": "",
-    "main": "webpack.config.js",
-    "dependencies": {},
-    "devDependencies": {
-        "@types/chai": "^4.2.12",
-        "@types/mocha": "^8.0.3",
-        "@typescript-eslint/eslint-plugin": "^4.1.0",
-        "@typescript-eslint/parser": "^4.1.0",
-        "chai": "^4.2.0",
-        "eslint": "^7.8.1",
-        "mocha": "^8.1.3",
-        "ts-loader": "^8.0.3",
-        "ts-node": "^9.0.0",
-        "tsconfig-paths": "^3.9.0",
-        "typescript": "^4.0.2",
-        "webpack": "^4.44.1",
-        "webpack-cli": "^3.3.11",
-        "webpack-dev-server": "^3.11.0"
-    },
+    "version": "0.1.0",
     "scripts": {
         "build": "webpack",
         "build:watch": "webpack --watch",
@@ -27,8 +8,22 @@
         "lint:fix": "npm run lint -- --fix",
         "server:start": "webpack-dev-server --open",
         "test": "mocha -r ts-node/register -r tsconfig-paths/register test/**/*.spec.ts",
-        "test:watch": "npm run test -- --watch --watch-files test/**/*.ts"
+        "test:watch": "npm test -- --watch --watch-files test/**/*.ts"
     },
-    "author": "",
-    "license": "ISC"
+    "devDependencies": {
+        "@types/chai": "^4.2.12",
+        "@types/mocha": "^8.0.3",
+        "@typescript-eslint/eslint-plugin": "^4.3.0",
+        "@typescript-eslint/parser": "^4.3.0",
+        "chai": "^4.2.0",
+        "eslint": "^7.10.0",
+        "mocha": "^8.1.3",
+        "ts-loader": "^8.0.4",
+        "ts-node": "^9.0.0",
+        "tsconfig-paths": "^3.9.0",
+        "typescript": "^4.0.3",
+        "webpack": "^4.44.2",
+        "webpack-cli": "^3.3.11",
+        "webpack-dev-server": "^3.11.0"
+    }
 }
