@@ -4,6 +4,9 @@ module.exports = {
     mode: 'development',
     entry: './index.ts',
     devtool: 'inline-source-map',
+    devServer: {
+        writeToDisk: true,
+    },
     output: {
         filename: 'bundle.js',
         path: path.resolve(__dirname, 'dist/'),
@@ -17,6 +20,6 @@ module.exports = {
             test: /\.ts$/,
             exclude: /node_modules/,
             use: 'ts-loader',
-        }]
-    }
+        }],
+    },
 };
