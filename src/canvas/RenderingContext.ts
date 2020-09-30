@@ -1,5 +1,5 @@
 import { Camera } from 'app/canvas/Camera';
-import { AxisAlignedBoundingBox } from 'app/canvas/collision/AxisAlignedBoundingBox';
+import { AxisAlignedBoundingBox } from 'app/canvas/AxisAlignedBoundingBox';
 import { Point } from 'app/canvas/Point';
 
 export class RenderingContext {
@@ -69,14 +69,5 @@ export class RenderingContext {
         point = this.camera.apply(point);
 
         this.context.moveTo(point.getX(), point.getZ());
-    }
-
-    public drawCircle(origin: Point, radius: number): void {
-        origin = this.camera.apply(origin);
-        radius = this.camera.applyZoom(radius);
-
-        this.beginPath();
-        this.context.arc(origin.getX(), origin.getZ(), radius, 0, 2 * Math.PI);
-        this.closePath();
     }
 }

@@ -4,9 +4,9 @@
         "noImplicitAny": true,
         "module": "commonjs",
         "target": "es2015",
-        "baseUrl": "./",
+        "baseUrl": "./src/",
         "paths": {
-            "app/*": ["src/*", "spec/*"]
+            "app/*": ["*"]
         }
     }
 }

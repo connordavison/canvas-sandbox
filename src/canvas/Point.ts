@@ -20,25 +20,19 @@ export class Point {
         return this.z;
     }
 
+    public translate(vector: Vector): Point {
+        return this.toVector().add(vector).toPoint();
+    }
+
     public scale(factor: number): Point {
         return new Point(this.x * factor, this.y * factor, this.z * factor);
     }
 
-    public getAngleBetween(a: Point, b: Point): number {
-        const angle = this.vectorTo(a).angle(this.vectorTo(b));
-
-        if (angle > Math.PI) {
-            return angle - 2 * Math.PI;
-        }
-
-        return angle;
-    }
-
     public distance(point: Point): number {
-        return Math.sqrt(
-            (point.x - this.x) ** 2
-            + (point.y - this.y) ** 2
-            + (point.z - this.z) ** 2
+        return Math.hypot(
+            point.x - this.x,
+            point.y - this.y,
+            point.z - this.z,
         );
     }
 

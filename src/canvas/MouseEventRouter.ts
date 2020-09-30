@@ -1,15 +1,8 @@
 import { Camera } from 'app/canvas/Camera';
-import { DragTransaction } from 'app/canvas/DragTransaction';
-import { MouseListener } from 'app/canvas/MouseListener';
 import { Point } from 'app/canvas/Point';
 
 export class MouseEventRouter {
-    private dragTransaction?: DragTransaction|void;
-
-    constructor(
-        private listeners: MouseListener[],
-        private camera: Camera,
-    ) {}
+    constructor(private camera: Camera) {}
 
     public register(target: EventTarget): void {
         target.addEventListener('mousedown', (event: MouseEvent) => {
@@ -26,25 +19,14 @@ export class MouseEventRouter {
     }
 
     public onMouseDown(position: Point): void {
-        for (const listener of this.listeners) {
-            if (this.dragTransaction) {
-                return;
-            }
-
-            this.dragTransaction = listener.onMouseDown(position);
-        }
+        console.debug(position);
     }
 
     public onMouseMove(position: Point): void {
-        if (this.dragTransaction) {
-            this.dragTransaction.update(position);
-        }
+        console.debug(position);
     }
 
     public onMouseUp(position: Point): void {
-        if (this.dragTransaction) {
-            this.dragTransaction.commit(position);
-            this.dragTransaction = undefined;
-        }
+        console.debug(position);
     }
 }

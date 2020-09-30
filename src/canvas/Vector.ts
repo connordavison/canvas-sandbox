@@ -1,4 +1,3 @@
-import { FuzzyMath } from 'app/canvas/FuzzyMath';
 import { Point } from 'app/canvas/Point';
 
 export class Vector {
@@ -56,17 +55,6 @@ export class Vector {
         return new Vector(-this.x, -this.y, -this.z);
     }
 
-    public projectOnto(vector: Vector): Vector {
-        const unit = vector.normalize();
-
-        return unit.scale(this.dot(unit));
-    }
-
-    public isParallel(vector: Vector): boolean {
-        return this.normalize()
-            .equals(vector.normalize());
-    }
-
     public normalize(): Vector {
         return this.divide(this.length());
     }
@@ -109,32 +97,6 @@ export class Vector {
             + this.z * vector.z;
     }
 
-    public signedAngleXZ(vector: Vector): number {
-        let angle = this.angle(vector);
-        const cross = this.cross(vector);
-        const normal = new Vector(0, -1, 0);
-
-        if (normal.dot(cross) < 0) {
-            angle = -angle;
-        }
-
-        return angle;
-    }
-
-    public angle(vector: Vector): number {
-        return FuzzyMath.acos(this.cos(vector));
-    }
-
-    public cos(vector: Vector): number {
-        const magnitudeProduct = this.length() * vector.length();
-
-        if (magnitudeProduct === 0) {
-            throw 'Angle is not defined for zero vectors.';
-        }
-
-        return this.dot(vector) / magnitudeProduct;
-    }
-
     public cross(vector: Vector): Vector {
         return new Vector(
             this.y * vector.z - this.z * vector.y,
@@ -149,12 +111,6 @@ export class Vector {
             this.y + point.getY(),
             this.z + point.getZ(),
         );
-    }
-
-    public equals(vector: Vector): boolean {
-        return FuzzyMath.eq(this.x, vector.x)
-            && FuzzyMath.eq(this.y, vector.y)
-            && FuzzyMath.eq(this.z, vector.z);
     }
 
     public toPoint(): Point {
