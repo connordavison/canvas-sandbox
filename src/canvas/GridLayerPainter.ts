@@ -1,5 +1,5 @@
-import { Point } from 'app/canvas/Point';
 import { RenderingContext } from 'app/canvas/RenderingContext';
+import { Point } from 'app/geometry/Point';
 
 const MINOR_INTERVAL = 50;
 const MAJOR_INTERVAL = 500;

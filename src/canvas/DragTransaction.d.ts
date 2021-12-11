@@ -1,4 +1,4 @@
-import { Point } from 'app/canvas/Point';
+import { Point } from 'app/geometry/Point';
 
 export interface DragTransaction {
     commit(point: Point): void;

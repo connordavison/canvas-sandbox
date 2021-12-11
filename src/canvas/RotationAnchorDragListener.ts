@@ -1,9 +1,9 @@
 import { ActionHistory } from 'app/canvas/ActionHistory';
-import { MouseListener } from 'app/canvas/MouseListener';
 import { DragTransaction } from 'app/canvas/DragTransaction';
-import { Point } from 'app/canvas/Point';
+import { MouseListener } from 'app/canvas/MouseListener';
 import { RotationAnchorDragTransaction } from 'app/canvas/RotationAnchorDragTransaction';
 import { RotationAnchorRepository } from 'app/canvas/RotationAnchorRepository';
+import { Point } from 'app/geometry/Point';
 
 export class RotationAnchorDragListener implements MouseListener {
     constructor(

@@ -1,7 +1,7 @@
 import { ActionHistory } from 'app/canvas/ActionHistory';
-import { Point } from 'app/canvas/Point';
 import { VertexAnchor } from 'app/canvas/VertexAnchor';
 import { VertexAnchorDragAction } from 'app/canvas/VertexAnchorDragAction';
+import { Point } from 'app/geometry/Point';
 
 export class VertexAnchorDragTransaction {
     private start: Point;

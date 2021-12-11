@@ -1,8 +1,8 @@
-import { Point } from 'app/canvas/Point';
-import { Polygon } from 'app/canvas/Polygon';
 import { PolygonMover } from 'app/canvas/PolygonMover';
 import { RotationAnchor } from 'app/canvas/RotationAnchor';
 import { RotationAnchorCollisionDetector } from 'app/canvas/RotationAnchorCollisionDetector';
+import { Point } from 'app/geometry/Point';
+import { Polygon } from 'app/geometry/Polygon';
 
 export class RotationAnchorRepository {
     private anchor?: RotationAnchor;

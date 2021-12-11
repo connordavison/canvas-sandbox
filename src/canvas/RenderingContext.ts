@@ -1,6 +1,6 @@
 import { Camera } from 'app/canvas/Camera';
-import { AxisAlignedBoundingBox } from 'app/canvas/collision/AxisAlignedBoundingBox';
-import { Point } from 'app/canvas/Point';
+import { AxisAlignedBoundingBox } from 'app/geometry/collision/AxisAlignedBoundingBox';
+import { Point } from 'app/geometry/Point';
 
 export class RenderingContext {
     constructor(

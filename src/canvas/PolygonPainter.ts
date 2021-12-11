@@ -1,5 +1,5 @@
-import { Polygon } from 'app/canvas/Polygon';
 import { RenderingContext } from 'app/canvas/RenderingContext';
+import { Polygon } from 'app/geometry/Polygon';
 
 export class PolygonPainter {
     constructor(private context: RenderingContext) {}

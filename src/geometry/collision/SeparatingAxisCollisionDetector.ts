@@ -1,14 +1,14 @@
-import { AxisPolygonProjectionCollision } from 'app/canvas/collision/AxisPolygonProjectionCollision';
-import { ConvexPolygonFace } from 'app/canvas/ConvexPolygonFace';
-import { Polygon } from 'app/canvas/Polygon';
+import { AxisPolygonProjectionCollision } from 'app/geometry/collision/AxisPolygonProjectionCollision';
+import { Polygon } from 'app/geometry/Polygon';
+import { PolygonEdge } from 'app/geometry/PolygonEdge';
 
 export class SeparatingAxisCollisionDetector {
     public collides(
         source: Polygon,
         target: Polygon,
     ): AxisPolygonProjectionCollision|undefined {
-        const faces = source.getClockwiseFaces().concat(target.getClockwiseFaces());
-        const collisions = this.collidesOnFaces(source, target, faces);
+        const edges = source.getClockwiseEdges().concat(target.getClockwiseEdges());
+        const collisions = this.collidesOnEdges(source, target, edges);
 
         if (undefined === collisions) {
             return undefined;
@@ -21,15 +21,15 @@ export class SeparatingAxisCollisionDetector {
         return minCollision;
     }
 
-    private collidesOnFaces(
+    private collidesOnEdges(
         source: Polygon,
         target: Polygon,
-        faces: ConvexPolygonFace[],
+        edges: PolygonEdge[],
     ): AxisPolygonProjectionCollision[]|undefined {
         const collisions = [];
 
-        for (const face of faces) {
-            const normal = face.getUnitNormal();
+        for (const edge of edges) {
+            const normal = edge.getUnitNormal();
 
             const sourceProjection = source.projectOnto(normal);
             const targetProjection = target.projectOnto(normal);

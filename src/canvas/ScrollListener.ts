@@ -1,5 +1,5 @@
 import { Camera } from 'app/canvas/Camera';
-import { Point } from 'app/canvas/Point';
+import { Point } from 'app/geometry/Point';
 
 export class ScrollListener {
     constructor(private camera: Camera) {}

@@ -1,8 +1,8 @@
 import { ActionHistory } from 'app/canvas/ActionHistory';
 import { DragTransaction } from 'app/canvas/DragTransaction';
-import { Point } from 'app/canvas/Point';
 import { RotationAnchor } from 'app/canvas/RotationAnchor';
 import { RotationAnchorDragAction } from 'app/canvas/RotationAnchorDragAction';
+import { Point } from 'app/geometry/Point';
 
 export class RotationAnchorDragTransaction implements DragTransaction {
     private start: Point;

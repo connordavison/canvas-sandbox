@@ -1,7 +1,7 @@
-import { Polygon } from 'app/canvas/Polygon';
-import { Point } from 'app/canvas/Point';
-import { PolyhedronFace } from 'app/canvas/PolyhedronFace';
-import { Vector } from 'app/canvas/Vector';
+import { Face } from 'app/geometry/Face';
+import { Point } from 'app/geometry/Point';
+import { Polygon } from 'app/geometry/Polygon';
+import { Vector } from 'app/geometry/Vector';
 
 export class Dimensions {
     constructor(private width: number, private height: number, private depth: number) {}
@@ -18,7 +18,7 @@ export class Dimensions {
         return this.depth;
     }
 
-    public createTopFace(): PolyhedronFace {
+    public createTopFace(): Face {
         return new Polygon([
             new Point(0, this.height, 0),
             new Point(0, this.height, this.depth),

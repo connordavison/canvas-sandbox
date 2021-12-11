@@ -1,4 +1,4 @@
-import { Vector } from 'app/canvas/Vector';
+import { Vector } from 'app/geometry/Vector';
 import { expect } from 'chai';
 
 describe('Vector', () => {

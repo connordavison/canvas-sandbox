@@ -1,7 +1,7 @@
 import { Camera } from 'app/canvas/Camera';
-import { Point } from 'app/canvas/Point';
 import { DragTransaction } from 'app/canvas/DragTransaction';
 import { MouseListener } from 'app/canvas/MouseListener';
+import { Point } from 'app/geometry/Point';
 
 export class CanvasDragListener implements MouseListener, DragTransaction {
     private start: Point;

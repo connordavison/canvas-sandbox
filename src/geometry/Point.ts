@@ -1,5 +1,5 @@
-import { FuzzyMath } from 'app/canvas/FuzzyMath';
-import { Vector } from 'app/canvas/Vector';
+import { FuzzyMath } from 'app/geometry/FuzzyMath';
+import { Vector } from 'app/geometry/Vector';
 
 export class Point {
     constructor(

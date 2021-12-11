@@ -1,4 +1,4 @@
-import { PolygonProjection } from 'app/canvas/collision/PolygonProjection';
+import { PolygonProjection } from 'app/geometry/collision/PolygonProjection';
 import { expect } from 'chai';
 
 describe('PolygonProjection', () => {

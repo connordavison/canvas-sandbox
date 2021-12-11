@@ -1,4 +1,4 @@
-import { Vector } from 'app/canvas/Vector';
+import { Vector } from 'app/geometry/Vector';
 
 export class AxisPolygonProjectionCollision {
     constructor(

@@ -1,6 +1,6 @@
-import { Matrix } from 'app/canvas/Matrix';
+import { Matrix } from 'app/geometry/Matrix';
+import { Point } from 'app/geometry/Point';
 import { expect } from 'chai';
-import { Point } from 'app/canvas/Point';
 
 describe('Matrix', () => {
     describe('#rotateXZ', () => {

@@ -1,5 +1,5 @@
-import { Point } from 'app/canvas/Point';
-import { Polygon } from 'app/canvas/Polygon';
+import { Point } from 'app/geometry/Point';
+import { Polygon } from 'app/geometry/Polygon';
 
 export class PolygonRepository {
     private polygons: Polygon[] = [];

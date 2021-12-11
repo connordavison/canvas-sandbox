@@ -1,6 +1,6 @@
-import { FuzzyMath } from 'app/canvas/FuzzyMath';
-import { Point } from 'app/canvas/Point';
-import { Vector } from 'app/canvas/Vector';
+import { FuzzyMath } from 'app/geometry/FuzzyMath';
+import { Point } from 'app/geometry/Point';
+import { Vector } from 'app/geometry/Vector';
 
 const ZOOM_STEP = 0.2;
 const ZOOM_MIN = 0.2;

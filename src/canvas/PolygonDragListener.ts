@@ -1,8 +1,8 @@
-import { PolygonRepository } from 'app/canvas/PolygonRepository';
-import { Point } from 'app/canvas/Point';
+import { DragTransaction } from 'app/canvas/DragTransaction';
 import { MouseListener } from 'app/canvas/MouseListener';
 import { PolygonDragTransactionFactory } from 'app/canvas/PolygonDragTransactionFactory';
-import { DragTransaction } from 'app/canvas/DragTransaction';
+import { PolygonRepository } from 'app/canvas/PolygonRepository';
+import { Point } from 'app/geometry/Point';
 
 export class PolygonDragListener implements MouseListener {
     constructor(

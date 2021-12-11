@@ -1,15 +1,12 @@
-import { Point } from 'app/canvas/Point';
-import { Polygon } from 'app/canvas/Polygon';
-import { Vector } from 'app/canvas/Vector';
+import { Point } from 'app/geometry/Point';
+import { PolygonVertex } from 'app/geometry/PolygonVertex';
+import { Vector } from 'app/geometry/Vector';
 
 export class VertexAnchor {
-    constructor(
-        private polygon: Polygon,
-        private id: number,
-    ) {}
+    constructor(private vertex: PolygonVertex) {}
 
     public move(vector: Vector): void {
-        this.polygon.movePoint(this.id, vector);
+        this.vertex.move(vector);
     }
 
     public isPointOnAnchor(point: Point): boolean {
@@ -21,6 +18,6 @@ export class VertexAnchor {
     }
 
     public getPosition(): Point {
-        return this.polygon.getPoints()[this.id];
+        return this.vertex.getPosition();
     }
 }

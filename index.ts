@@ -1,9 +1,9 @@
 import { ActionHistory } from 'app/canvas/ActionHistory';
 import { Camera } from 'app/canvas/Camera';
 import { CanvasDragListener } from 'app/canvas/CanvasDragListener';
-import { CollisionDetector } from 'app/canvas/collision/CollisionDetector';
-import { SeparatingAxisCollisionDetector } from 'app/canvas/collision/SeparatingAxisCollisionDetector';
-import { Dimensions } from 'app/canvas/Dimensions';
+import { CollisionDetector } from 'app/geometry/collision/CollisionDetector';
+import { SeparatingAxisCollisionDetector } from 'app/geometry/collision/SeparatingAxisCollisionDetector';
+import { Dimensions } from 'app/geometry/Dimensions';
 import { GridLayerPainter } from 'app/canvas/GridLayerPainter';
 import { PanDownHotkey } from 'app/canvas/hotkeys/PanDownHotkey';
 import { PanLeftHotkey } from 'app/canvas/hotkeys/PanLeftHotkey';
@@ -35,6 +35,7 @@ import { VertexAnchorPainter } from 'app/canvas/VertexAnchorPainter';
 import { VertexAnchorRepository } from 'app/canvas/VertexAnchorRepository';
 import { WindowResizeListener } from 'app/canvas/WindowResizeListener';
 import { WorldPainter } from 'app/canvas/WorldPainter';
+import { VertexAnchorFactory } from 'app/canvas/VertexAnchorFactory';
 
 const canvas = document.createElement('canvas');
 
@@ -61,6 +62,7 @@ const rotationAnchorCollisionDetector = new RotationAnchorCollisionDetector(
 const rotationAnchorRepository = new RotationAnchorRepository(rotationAnchorCollisionDetector, polygonMover);
 const rotationAnchorLayerPainter = new RotationAnchorLayerPainter(rotationAnchorRepository, rotationAnchorPainter);
 
+const vertexAnchorFactory = new VertexAnchorFactory();
 const vertexAnchorRepository = new VertexAnchorRepository();
 const vertexAnchorPainter = new VertexAnchorPainter(renderingContext);
 const vertexAnchorLayerPainter = new VertexAnchorLayerPainter(vertexAnchorRepository, vertexAnchorPainter);
@@ -72,7 +74,11 @@ for (const polygon of polygons) {
     polygonRepository.push(polygon);
 }
 
-const polygonSelector = new PolygonSelector(rotationAnchorRepository, vertexAnchorRepository);
+const polygonSelector = new PolygonSelector(
+    rotationAnchorRepository,
+    vertexAnchorFactory,
+    vertexAnchorRepository,
+);
 
 const mouseEventRouter = new MouseEventRouter([
     new RotationAnchorDragListener(rotationAnchorRepository, actionHistory),

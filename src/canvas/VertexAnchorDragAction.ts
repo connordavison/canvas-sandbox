@@ -1,7 +1,7 @@
 import { Action } from 'app/canvas/Action';
-import { Point } from 'app/canvas/Point';
-import { Vector } from 'app/canvas/Vector';
 import { VertexAnchor } from 'app/canvas/VertexAnchor';
+import { Point } from 'app/geometry/Point';
+import { Vector } from 'app/geometry/Vector';
 
 export class VertexAnchorDragAction implements Action {
     constructor(

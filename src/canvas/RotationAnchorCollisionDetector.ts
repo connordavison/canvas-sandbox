@@ -1,7 +1,7 @@
-import { CollisionDetector } from 'app/canvas/collision/CollisionDetector';
-import { Dimensions } from 'app/canvas/Dimensions';
-import { Point } from 'app/canvas/Point';
 import { RotationAnchor } from 'app/canvas/RotationAnchor';
+import { CollisionDetector } from 'app/geometry/collision/CollisionDetector';
+import { Dimensions } from 'app/geometry/Dimensions';
+import { Point } from 'app/geometry/Point';
 
 export class RotationAnchorCollisionDetector {
     constructor(

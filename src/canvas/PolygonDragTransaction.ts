@@ -1,9 +1,9 @@
 import { ActionHistory } from 'app/canvas/ActionHistory';
 import { DragTransaction } from 'app/canvas/DragTransaction';
-import { Point } from 'app/canvas/Point';
-import { Polygon } from 'app/canvas/Polygon';
 import { PolygonDragAction } from 'app/canvas/PolygonDragAction';
 import { PolygonMover } from 'app/canvas/PolygonMover';
+import { Point } from 'app/geometry/Point';
+import { Polygon } from 'app/geometry/Polygon';
 
 export class PolygonDragTransaction implements DragTransaction {
     private lastPoint: Point;

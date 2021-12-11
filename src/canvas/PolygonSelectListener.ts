@@ -1,7 +1,7 @@
 import { MouseListener } from 'app/canvas/MouseListener';
-import { Point } from 'app/canvas/Point';
 import { PolygonRepository } from 'app/canvas/PolygonRepository';
 import { PolygonSelector } from 'app/canvas/PolygonSelector';
+import { Point } from 'app/geometry/Point';
 
 export class PolygonSelectListener implements MouseListener {
     constructor(

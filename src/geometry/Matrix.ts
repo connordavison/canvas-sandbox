@@ -1,5 +1,5 @@
-import { Point } from 'app/canvas/Point';
-import { Vector } from 'app/canvas/Vector';
+import { Point } from 'app/geometry/Point';
+import { Vector } from 'app/geometry/Vector';
 
 export class Matrix {
     private constructor(private rows: number[][]) {}

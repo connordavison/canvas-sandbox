@@ -1,4 +1,4 @@
-import { FuzzyMath } from 'app/canvas/FuzzyMath';
+import { FuzzyMath } from 'app/geometry/FuzzyMath';
 import { expect } from 'chai';
 
 describe('FuzzyMath', () => {

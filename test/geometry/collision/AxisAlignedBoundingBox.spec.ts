@@ -1,6 +1,6 @@
-import { AxisAlignedBoundingBox } from 'app/canvas/collision/AxisAlignedBoundingBox';
-import { Dimensions } from 'app/canvas/Dimensions';
-import { Point } from 'app/canvas/Point';
+import { AxisAlignedBoundingBox } from 'app/geometry/collision/AxisAlignedBoundingBox';
+import { Dimensions } from 'app/geometry/Dimensions';
+import { Point } from 'app/geometry/Point';
 import { expect } from 'chai';
 
 describe('AxisAlignedBoundingBox', () => {

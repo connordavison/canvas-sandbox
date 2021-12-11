@@ -1,7 +1,7 @@
 import { Action } from 'app/canvas/Action';
-import { Polygon } from 'app/canvas/Polygon';
 import { PolygonMover } from 'app/canvas/PolygonMover';
-import { Vector } from 'app/canvas/Vector';
+import { Polygon } from 'app/geometry/Polygon';
+import { Vector } from 'app/geometry/Vector';
 
 export class PolygonDragAction implements Action {
     constructor(

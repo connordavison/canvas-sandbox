@@ -1,6 +1,6 @@
-import { Point } from 'app/canvas/Point';
-import { Polygon } from 'app/canvas/Polygon';
 import { PolygonMover } from 'app/canvas/PolygonMover';
+import { Point } from 'app/geometry/Point';
+import { Polygon } from 'app/geometry/Polygon';
 
 export class RotationAnchor {
     constructor(
@@ -25,11 +25,11 @@ export class RotationAnchor {
     }
 
     public getAbsolutePosition(): Point {
-        const face = this.target.getFirstClockwiseFace();
+        const edge = this.target.getFirstClockwiseEdge();
 
-        return face.getMidpoint()
+        return edge.getMidpoint()
             .toVector()
-            .add(face.getUnitNormal().scale(20))
+            .add(edge.getUnitNormal().scale(20))
             .toPoint();
     }
 

@@ -1,9 +1,9 @@
 import { ActionHistory } from 'app/canvas/ActionHistory';
 import { DragTransaction } from 'app/canvas/DragTransaction';
 import { MouseListener } from 'app/canvas/MouseListener';
-import { Point } from 'app/canvas/Point';
 import { VertexAnchorDragTransaction } from 'app/canvas/VertexAnchorDragTransaction';
 import { VertexAnchorRepository } from 'app/canvas/VertexAnchorRepository';
+import { Point } from 'app/geometry/Point';
 
 export class VertexAnchorDragListener implements MouseListener {
     constructor(

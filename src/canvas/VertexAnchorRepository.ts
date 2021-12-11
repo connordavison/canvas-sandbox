@@ -1,5 +1,5 @@
-import { Point } from 'app/canvas/Point';
 import { VertexAnchor } from 'app/canvas/VertexAnchor';
+import { Point } from 'app/geometry/Point';
 
 export class VertexAnchorRepository {
     private anchors: VertexAnchor[] = [];

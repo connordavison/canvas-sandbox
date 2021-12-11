@@ -1,4 +1,4 @@
-import { Action } from 'app/canvas/Action'
+import { Action } from 'app/canvas/Action';
 import { RotationAnchor } from 'app/canvas/RotationAnchor';
 
 export class RotationAnchorDragAction implements Action {

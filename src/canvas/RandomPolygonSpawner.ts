@@ -1,7 +1,7 @@
-import { Matrix } from 'app/canvas/Matrix';
-import { Point } from 'app/canvas/Point';
-import { Polygon } from 'app/canvas/Polygon';
-import { Vector } from 'app/canvas/Vector';
+import { Matrix } from 'app/geometry/Matrix';
+import { Point } from 'app/geometry/Point';
+import { Polygon } from 'app/geometry/Polygon';
+import { Vector } from 'app/geometry/Vector';
 
 export class RandomPolygonSpawner {
     public spawnMany(number: number): Polygon[] {

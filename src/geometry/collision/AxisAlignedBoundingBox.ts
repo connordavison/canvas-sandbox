@@ -1,6 +1,6 @@
-import { Dimensions } from 'app/canvas/Dimensions';
-import { Point } from 'app/canvas/Point';
-import { Polygon } from 'app/canvas/Polygon';
+import { Dimensions } from 'app/geometry/Dimensions';
+import { Point } from 'app/geometry/Point';
+import { Polygon } from 'app/geometry/Polygon';
 
 export class AxisAlignedBoundingBox {
     constructor(private min: Point, private max: Point) {}

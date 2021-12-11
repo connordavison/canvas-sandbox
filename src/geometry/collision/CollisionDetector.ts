@@ -1,6 +1,6 @@
-import { Point } from 'app/canvas/Point';
-import { Dimensions } from 'app/canvas/Dimensions';
-import { AxisAlignedBoundingBox } from 'app/canvas/collision/AxisAlignedBoundingBox';
+import { Point } from 'app/geometry/Point';
+import { Dimensions } from 'app/geometry/Dimensions';
+import { AxisAlignedBoundingBox } from 'app/geometry/collision/AxisAlignedBoundingBox';
 
 export class CollisionDetector {
     public isPointWithinHitboxOfPoint(query: Point, hitbox: Dimensions, point: Point): boolean {
