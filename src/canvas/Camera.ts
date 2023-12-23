@@ -1,4 +1,5 @@
 import { FuzzyMath } from 'app/geometry/FuzzyMath';
+import { Matrix } from 'app/geometry/Matrix';
 import { Point } from 'app/geometry/Point';
 import { Vector } from 'app/geometry/Vector';
 
@@ -11,6 +12,11 @@ const PAN_STEP = 10;
 export class Camera {
     private pan = Vector.zero();
     private zoom = 1;
+
+    public toMatrix(): Matrix {
+        return Matrix.scale(1 / this.zoom)
+            .translate(this.pan.getX(), this.pan.getY(), this.pan.getZ());
+    }
 
     public panLeft(): void {
         this.pan = this.pan.add(new Vector(PAN_STEP, 0, 0));
@@ -55,19 +61,11 @@ export class Camera {
         this.zoom = z1;
     }
 
-    public apply(point: Point): Point {
-        return this.pan.movePoint(point).scale(1 / this.zoom);
-    }
-
     public invert(point: Point): Point {
         return this.pan.negate().movePoint(point.scale(this.zoom));
     }
 
     public findMouseEvent(event: MouseEvent): Point {
         return this.invert(new Point(event.offsetX, 0, event.offsetY));
-    }
-
-    public applyZoom(number: number): number {
-        return number / this.zoom;
     }
 }

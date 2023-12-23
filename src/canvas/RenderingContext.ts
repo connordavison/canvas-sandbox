@@ -1,11 +1,14 @@
-import { Camera } from 'app/canvas/Camera';
-import { AxisAlignedBoundingBox } from 'app/geometry/collision/AxisAlignedBoundingBox';
+import { Matrix } from 'app/geometry/Matrix';
 import { Point } from 'app/geometry/Point';
+
+interface Dimensions {
+    width: number;
+    height: number;
+}
 
 export class RenderingContext {
     constructor(
         private context: CanvasRenderingContext2D,
-        private camera: Camera,
     ) {}
 
     public clear(): void {
@@ -14,13 +17,8 @@ export class RenderingContext {
         this.context.clearRect(0, 0, canvas.width, canvas.height);
     }
 
-    public getDimensions(): AxisAlignedBoundingBox {
-        const canvas = this.context.canvas;
-
-        const topLeft = this.camera.invert(new Point(0, 0, 0))
-        const bottomRight = this.camera.invert(new Point(canvas.width, 0, canvas.height));
-
-        return new AxisAlignedBoundingBox(topLeft, bottomRight);
+    public getDimensions(): Dimensions {
+        return this.context.canvas;
     }
 
     public fitToScreen(): void {
@@ -30,6 +28,15 @@ export class RenderingContext {
         canvas.height = window.innerHeight;
     }
 
+    public fillRect(min: Point, max: Point): void {
+        const minX = min.getX();
+        const minZ = min.getZ();
+        const dx = max.getX() - minX;
+        const dz = max.getZ() - minZ;
+
+        this.context.fillRect(minX, minZ, dx, dz);
+    }
+
     public strokeLine(from: Point, to: Point): void {
         this.beginPath();
         this.moveTo(from);
@@ -37,7 +44,31 @@ export class RenderingContext {
         this.closePath();
     }
 
-    public setFillStyle(fillStyle: string): void {
+    public createPattern(canvas: HTMLCanvasElement, repetition: string): CanvasPattern {
+        return this.context.createPattern(canvas, repetition);
+    }
+
+    public save(): void {
+        this.context.save();
+    }
+
+    public restore(): void {
+        this.context.restore();
+    }
+
+    public setTransform(matrix: Matrix): void {
+        // m00, m20, m02, m22, m03*r, m23*r
+        this.context.setTransform(
+            matrix.at(0, 0),
+            matrix.at(2, 0),
+            matrix.at(0, 2),
+            matrix.at(2, 2),
+            matrix.at(0, 3),
+            matrix.at(2, 3),
+        );
+    }
+
+    public setFillStyle(fillStyle: string | CanvasPattern): void {
         this.context.fillStyle = fillStyle;
     }
 
@@ -60,21 +91,14 @@ export class RenderingContext {
     }
 
     public lineTo(point: Point): void {
-        point = this.camera.apply(point);
-
         this.context.lineTo(point.getX(), point.getZ());
     }
 
     public moveTo(point: Point): void {
-        point = this.camera.apply(point);
-
         this.context.moveTo(point.getX(), point.getZ());
     }
 
     public drawCircle(origin: Point, radius: number): void {
-        origin = this.camera.apply(origin);
-        radius = this.camera.applyZoom(radius);
-
         this.beginPath();
         this.context.arc(origin.getX(), origin.getZ(), radius, 0, 2 * Math.PI);
         this.closePath();

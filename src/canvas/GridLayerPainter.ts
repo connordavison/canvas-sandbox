@@ -1,48 +1,52 @@
+import { Camera } from 'app/canvas/Camera';
 import { RenderingContext } from 'app/canvas/RenderingContext';
 import { Point } from 'app/geometry/Point';
 
-const MINOR_INTERVAL = 50;
-const MAJOR_INTERVAL = 500;
+const WIDTH = 500;
+const SUBDIVISIONS = 10;
 
 export class GridLayerPainter {
-    constructor(private context: RenderingContext) {}
+    private readonly pattern: CanvasPattern;
+
+    constructor(
+        private readonly context: RenderingContext,
+        private readonly camera: Camera,
+    ) {
+        this.pattern = context.createPattern(this.createPattern(WIDTH, SUBDIVISIONS), 'repeat');
+    }
 
     public paint(): void {
-        this.context.setStrokeStyle('#EEE');
-        this.strokeInterval(MINOR_INTERVAL);
-        this.context.setStrokeStyle('#CCC');
-        this.strokeInterval(MAJOR_INTERVAL);
+        this.context.save();
+        this.context.setFillStyle(this.pattern);
+        const { width, height } = this.context.getDimensions();
+        const min = this.camera.invert(new Point(0, 0, 0));
+        const max = this.camera.invert(new Point(width, 0, height));
+        this.context.fillRect(min, max);
+        this.context.restore();
     }
 
-    private strokeInterval(interval: number) {
-        const box = this.context.getDimensions();
+    private createPattern(size: number, subdivisions: number) {
+        const canvas = document.createElement('canvas');
+        const context = new RenderingContext(canvas.getContext('2d'));
 
-        const left = Math.floor(box.getLeft() / interval) * interval;
-        const right = box.getRight();
+        canvas.width = size;
+        canvas.height = size;
 
-        const top = Math.floor(box.getTop() / interval) * interval;
-        const bottom = box.getBottom();
+        context.setStrokeStyle('#EEE');
+        this.renderGrid(context, size, size / subdivisions);
+        context.setStrokeStyle('#CCC');
+        this.renderGrid(context, size, size);
 
-        for (let x = left; x < right; x += interval) {
-            this.strokeVertical(top, bottom, x);
+        return canvas;
+    }
 
-            for (let z = top; z < bottom; z+= interval) {
-                this.strokeHorizontal(left, right, z);
+    private renderGrid(context: RenderingContext, size: number, ds: number): void {
+        for (let x = 0; x <= size; x += ds) {
+            context.strokeLine(new Point(x, 0, 0), new Point(x, 0, size));
+
+            for (let z = 0; z <= size; z += ds) {
+                context.strokeLine(new Point(0, 0, z), new Point(size, 0, z));
             }
         }
-    }
-
-    private strokeVertical(top: number, bottom: number, x: number): void {
-        this.context.strokeLine(
-            new Point(x, 0, top),
-            new Point(x, 0, bottom),
-        );
-    }
-
-    private strokeHorizontal(left: number, right: number, z: number): void {
-        this.context.strokeLine(
-            new Point(left, 0, z),
-            new Point(right, 0, z),
-        );
     }
 }

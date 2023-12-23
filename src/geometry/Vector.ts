@@ -8,6 +8,18 @@ export class Vector {
         private readonly z: number,
     ) {}
 
+    public getX(): number {
+        return this.x;
+    }
+
+    public getY(): number {
+        return this.y;
+    }
+
+    public getZ(): number {
+        return this.z;
+    }
+
     public static zero(): Vector {
         return new Vector(0, 0, 0);
     }

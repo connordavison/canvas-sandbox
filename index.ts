@@ -40,8 +40,8 @@ import { VertexAnchorFactory } from 'app/canvas/VertexAnchorFactory';
 const canvas = document.createElement('canvas');
 
 const camera = new Camera();
-const renderingContext = new RenderingContext(canvas.getContext('2d'), camera);
-const gridLayerPainter = new GridLayerPainter(renderingContext);
+const renderingContext = new RenderingContext(canvas.getContext('2d'));
+const gridLayerPainter = new GridLayerPainter(renderingContext, camera);
 const polygonPainter = new PolygonPainter(renderingContext);
 const polygonRepository = new PolygonRepository();
 
@@ -90,12 +90,13 @@ const mouseEventRouter = new MouseEventRouter([
 
 mouseEventRouter.register(document);
 
-const worldPainter = new WorldPainter(renderingContext, [
+const layerPainters = [
     gridLayerPainter,
     polygonLayerPainter,
     rotationAnchorLayerPainter,
     vertexAnchorLayerPainter,
-]);
+];
+const worldPainter = new WorldPainter(renderingContext, camera, layerPainters);
 
 const keyboardEventRouter = new KeyboardEventRouter({
     'z': new UndoHotkey(actionHistory),
@@ -116,12 +117,14 @@ const windowResizeListener = new WindowResizeListener(renderingContext);
 
 windowResizeListener.register(window);
 
-const ticksPerSecond = 60;
+const ticksPerSecond = 120;
 const msPerTick = 1000 / ticksPerSecond;
 
 document.body.appendChild(canvas);
 renderingContext.fitToScreen();
 
 setInterval(() => {
-    worldPainter.paint();
+    requestAnimationFrame(() => {
+        worldPainter.paint();
+    });
 }, msPerTick);
